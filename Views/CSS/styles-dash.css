@@ -1,0 +1,498 @@
+@import url('https://fonts.googleapis.com/css2?family-Poppins:wght@600&display-swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root{
+    --primary: #2b344b;
+    --secondary: #6f7e8a;
+    --tertiary: #9cf778;
+    --quaternary: #82f84b;
+    --quinary: #2fdd03;
+    --white: #fff;
+    --black: #000;
+    --blue: #000fe4;
+    --yello: #d0ff00;
+    --verde: #1A7526;
+
+}
+
+body{
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+
+.Container{
+    position: relative;
+    width: 100%;
+}
+/*-------------------NAVIGATION----------------------*/
+.navigation{
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--verde);
+    border-left: 10px solid var(--verde);
+    transition: 0.5s;
+    overflow: hidden;
+}
+.navigation.active{
+    width: 80px;
+}
+
+
+.navigation ul{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.navigation ul li{
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+.navigation ul li:hover,
+.navigation ul li.hovered{
+    background-color: var(--white);
+}
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+.navigation ul li a{
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 20px;
+    text-decoration: none;
+    color: var(--white);
+}
+.navigation ul li:hover a,
+.navigation ul li.hovered a{
+    color: var(--primary);
+}
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50px;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after{
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50px;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+/*---------------------------LOGO------------------------*/
+
+.navigation ul li img {
+    width: 100%; /* Faz a imagem ocupar toda a largura disponível do container */
+    max-width: 200px; /* Defina um valor máximo para a largura, ajustando conforme necessário */
+    height: auto; /* Mantém a proporção da imagem */
+    margin: 20px 0; /* Dá um pequeno espaçamento em cima e embaixo da imagem */
+    object-fit: contain; /* Garante que a imagem será redimensionada sem cortar */
+    display: block; /* Garante que a imagem esteja visível */
+    width: 100%; /* Ajusta a largura da imagem ao tamanho disponível */
+    max-width: 200px; /* Define a largura máxima */
+    margin: 10px auto; /* Centraliza a imagem e dá margem ao redor dela */
+    margin-left: -2rem;
+}
+.navigation.active ul li img {
+    display: block; /* Faz a imagem aparecer normalmente quando a navegação estiver expandida */
+}
+
+
+/*--------------------------Main--------------------------*/
+
+
+.main{
+    position: absolute;
+    left: 300px;
+    width: calc(100% - 300px);
+    background: var(--white);
+    transition: 0.5s;
+    min-height: 100vh;
+}
+.main.active{
+    left: 80px;
+    width: calc(100% - 80px);
+}
+.topbar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+.toggle{
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+.menu-outline{
+    transition: .3s ease;
+}
+.menu-outline:hover{
+    width: 60px;
+}
+.search{
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+}
+.search label{
+    position: relative;
+    width: 100%;
+}
+.search label input{
+    width: 100%;
+    height: 40px;
+    padding: 5px 20px;
+    padding-left: 35px;
+    border-radius: 40px;
+    font-size: 18px;
+    border: 1px solid var(--secondary);
+    outline: none;
+}
+.search label ion-icon{
+    position: absolute;
+    top: 0;
+    left: 10px;
+    font-size: 1.2rem;
+}
+.user{
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+.user img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/*----- Perfil do Admin/User -----*/
+
+
+/*-------------------Cards----------------------*/
+
+.cardBox{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 30px;
+}
+.cardBox .card{
+    position: relative;
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+.cardBox .card .numbers{
+    position: relative;
+    font-weight: 500;
+    font-size: 2.5rem;
+    color: var(--primary);
+}
+.cardBox .card .cardName{
+    color: var(--secondary);
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+.cardBox .card .iconBox{
+    font-size: 3.5rem;
+    color: var(--verde);
+}
+.cardBox .card:hover{
+    color: var(--quaternary);
+}
+.cardBox .card:hover .numbers,
+.cardBox .card:hover .cardName,
+.cardBox .card:hover .iconBox{
+    color: var(--primary);
+}
+
+/*-------------------Chart----------------------*/
+
+.graphBox{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 30px;
+    min-height: 200px;
+}
+.graphBox .box{
+    position: relative;
+    background: var(--white);
+    padding: 20px;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+
+/*-------------------RESPONSIVIDADE------------------*/
+
+/*----------------- NAVIGATION -----------------*/
+@media (max-width: 1024px) {
+    .navigation {
+        width: 250px;
+    }
+
+    .navigation.active {
+        width: 60px;
+    }
+
+    .main {
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+
+    .search {
+        width: 300px;
+    }
+}
+
+/*--------------LOGO---------------*/
+
+@media (max-width: 768px) {
+    .navigation ul li img {
+        max-width: 150px; /* Ajusta a largura máxima da imagem para dispositivos móveis */
+        width: auto;
+        margin: 10px auto; /* Dá uma margem para a imagem */
+    }
+}
+
+/* Responsividade para dispositivos pequenos */
+@media (max-width: 768px) {
+    .navigation {
+        width: 250px;
+    }
+
+    .navigation.active {
+        width: 80px; /* Quando o menu estiver ativo, reduz a largura para 80px */
+    }
+
+    .main {
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+
+    .main.active {
+        left: 80px;
+        width: calc(100% - 80px);
+    }
+
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr); /* Ajusta o grid para 2 colunas em telas menores */
+    }
+
+    /* Ajusta a largura da barra de pesquisa */
+    .search {
+        width: 250px;
+    }
+
+    /* Deixa o ícone de menu visível em telas menores */
+    .toggle {
+        display: block;
+    }
+
+    /* Oculta os textos das opções de navegação e deixa só os ícones visíveis */
+    .navigation ul li .title {
+        display: none;
+    }
+
+    /* Exibe os ícones corretamente quando a navegação estiver contraída */
+    .navigation.active ul li .icon {
+        display: inline-block;
+    }
+
+    /* Ajuste para exibir apenas os ícones */
+    .navigation ul li a {
+        justify-content: center;
+        padding: 15px 20px;
+    }
+
+    /* Ajusta o ícone para que ele fique centralizado */
+    .navigation ul li a .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Quando o menu estiver expandido, o texto é visível */
+    .navigation:not(.active) ul li .title {
+        display: inline-block;
+    }
+
+    /* CardBox com menos colunas em telas pequenas */
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* On tablets and smaller screens */
+    .navigation {
+        width: 200px;
+    }
+
+    .navigation.active {
+        width: 70px;
+    }
+
+    .main {
+        left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .search {
+        width: 250px;
+    }
+
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    /* For mobile screens */
+    .navigation {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-left: none;
+    }
+
+    .navigation.active {
+        width: 100%;
+    }
+
+    .main {
+        left: 0;
+        width: 100%;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .cardBox {
+        grid-template-columns: 1fr; /* 1 column for mobile */
+    }
+
+    .topbar {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .toggle {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .search label input {
+        font-size: 16px;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* ------------------- Cards ------------------*/
+@media (max-width: 768px) {
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr); /* Adjust the card layout for smaller screens */
+    }
+
+    .cardBox .card {
+        padding: 20px;
+        font-size: 14px;
+    }
+}
+
+/* ------------------- Graphs ------------------- */
+@media (max-width: 768px) {
+    .graphBox {
+        grid-template-columns: 1fr; /* Stack the graph and chart on smaller screens */
+    }
+}
+/* Estilo do Formulário -- Listar Usuario */
+.form-control {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+#msgAlertaErroCad {
+    margin-bottom: 20px;
+}
+
+/* Botão de Cadastrar */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
