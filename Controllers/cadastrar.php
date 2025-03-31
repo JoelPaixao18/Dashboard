@@ -6,7 +6,7 @@
 
     if(empty($dados['nome'])) {
         $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Necessário preencher o campo Nome!</div>"];
-    } elseif(!preg_match('/^[a-zA-Z\s]+$/', $dados['nome'])) {
+    } elseif(!preg_match('/^[\p{L}\s]+$/u', $dados['nome'])) {
         $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Nome inválido! Informe apenas letras e espaços.</div>"];
     } elseif(empty($dados['email'])) {
         $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Necessário preencher o campo E-mail!</div>"];

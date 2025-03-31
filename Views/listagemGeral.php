@@ -131,6 +131,7 @@
 							<div class="modal-body">
 								<form id="cad-propriedade-form">
                                 <span id="msgAlertaErroCad"></span>
+									<h3>Dados do Proprietário</h3>
 									<div class="row mb-3">
 										<label for="nome" class="col-form-label">Nome</label>
 										<input type="text" name="nome" class="form-control" id="nome" placeholder="Nome Completo" >
@@ -151,47 +152,43 @@
 										<label for="endereco" class="col-form-label">Endereço</label>
 										<input type="text" name="endereco" class="form-control" id="endereco" placeholder="Digite seu Endereço" >
 									</div>
+
                                     <hr>
-                                    <ul class="side-menu">
-                                        <li>
-                                            <a href="#">Registrar Propriedade <i class='bx bx-chevron-right icon-right' ></i></a>
-                                            <ul class="side-dropdown">
-                                                <div class="row mb-3">
-                                                   <select name="zonamento" id="zonamento" class="form-select" aria-label="Default select example">
-                                                        <option value="">----- Tipo de Residencia -----</option>
-                                                        <option value="Residencia">Apartamento</option>
-                                                        <option value="Residencia">Kitnet</option>
-                                                        <option value="Residencia">Flat</option>
-                                                        <option value="Residencia">Condomínio Residencial</option>
-                                                        <option value="Residencia">Coberturas</option>
-                                                        <option value="Residencia">Casas de Condomínio fechado</option>
-                                                        <option value="Residencia">Apartamento padrão</option>
-                                                        <option value="Residencia">Eco-Condomínio</option>
-                                                        <option value="Residencia">Casa autoconstruída</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="localizaco" class="col-form-label">Localização</label>
-                                                    <input type="text" name="localizacao" class="form-control" id="localizacao" placeholder="Digite se Endereço" >
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="preco" class="col-form-label">Valor Avaliado</label>
-                                                    <input type="number" name="preco" class="form-control" id="preco" step="0.01" min="0" placeholder="Kz 0.00" >
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <select name="status" id="status" class="form-select" aria-label="Default select example">
-                                                        <option value="">----- Estado da Residência ----</option>
-                                                        <option value="venda">Venda</option>
-                                                        <option value="renda">Renda</option>
-                                                    </select>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="descricao" class="col-form-label">Descrição</label>
-                                                    <input type="text" name="descricao" class="form-control" id="descricao" placeholder="Digite a descrição de Residência" >
-                                                </div>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    
+                                    <h3>Registrar Propriedade</h3>
+                                    <div class="row mb-3">
+                                        <select name="zonamento" id="zonamento" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Tipo de Residencia -----</option>
+                                            <option value="Residencia">Apartamento</option>
+                                            <option value="Residencia">Kitnet</option>
+                                            <option value="Residencia">Flat</option>
+                                            <option value="Residencia">Condomínio Residencial</option>
+                                            <option value="Residencia">Coberturas</option>
+                                                <option value="Residencia">Casas de Condomínio fechado</option>
+                                            <option value="Residencia">Apartamento padrão</option>
+                                            <option value="Residencia">Eco-Condomínio</option>
+                                            <option value="Residencia">Casa autoconstruída</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="localizaco" class="col-form-label">Localização</label>
+                                        <input type="text" name="localizacao" class="form-control" id="localizacao" placeholder="Digite se Endereço" >
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="preco" class="col-form-label">Valor Avaliado</label>
+                                        <input type="number" name="preco" class="form-control" id="preco" step="0.01" min="0" placeholder="Kz 0.00" >
+                                    </div>
+                                    <div class="row mb-3">
+                                        <select name="status" id="status" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Estado da Residência ----</option>
+                                            <option value="venda">Venda</option>
+                                            <option value="renda">Renda</option>
+                                        </select>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="descricao" class="col-form-label">Descrição</label>
+                                        <input type="text" name="descricao" class="form-control" id="descricao" placeholder="Digite a descrição de Residência" >
+                                    </div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
 										<input type="submit" class="btn btn-success" id="cad-propriedade-btn" value="Cadastrar"/>
