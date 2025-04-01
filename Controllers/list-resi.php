@@ -41,9 +41,15 @@ if (!empty($pagina)) {
                     <td>$status</td>
                     <td>$descricao</td>
                     <td>
-                        <button id='$id' class='btn btn-primary btn-sm' onclick='visResidencia($id)' >Vizualizar</button>
-                        <button id='$id' class='btn btn-warning btn-sm' onclick='editResidenciaDados($id)' >Editar</button>
-                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarResidenciaDados($id)' >Eliminar</button>
+                        <button id='$id' class='btn btn-primary btn-sm' onclick='visResidencia($id)' >
+                            <i class='fas fa-eye'></i>
+                        </button>
+                        <button id='$id' class='btn btn-warning btn-sm' onclick='editResidenciaDados($id)' >
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarResidenciaDados($id)' >
+                            <i class='fas fa-trash'></i>
+                        </button>
                     </td>
                 </tr>";
     }

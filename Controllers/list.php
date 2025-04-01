@@ -37,9 +37,15 @@ if (!empty($pagina)) {
                     <td>$email</td>
                     <td>$role</td>
                     <td>
-                        <button id='$id' class='btn btn-primary btn-sm' onclick='visUsuario($id)' >Vizualizar</button>
-                        <button id='$id' class='btn btn-warning btn-sm' onclick='editUsuarioDados($id)' >Editar</button>
-                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarUsuarioDados($id)' >Eliminar</button>
+                        <button id='$id' class='btn btn-primary btn-sm' onclick='visUsuario($id)' >
+                            <i class='fas fa-eye'></i>
+                        </button>
+                        <button id='$id' class='btn btn-warning btn-sm' onclick='editUsuarioDados($id)' >
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarUsuarioDados($id)' >
+                            <i class='fas fa-trash'></i>
+                        </button>
                     </td>
                 </tr>";
     }
@@ -79,6 +85,6 @@ if (!empty($pagina)) {
    echo $dados;
    
 } else {
-    echo "<div class='alert alert-danger' role='alert'>Erro: Nenhum Usuário encontardo!</div>";
+    echo "<div class='alert alert-danger' role='alert'>Erro: Nenhum Usuário encontrado!</div>";
 }
 ?>

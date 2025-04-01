@@ -41,9 +41,15 @@
                     <td>$BI</td>
                     <td>$endereco</td>
                     <td>
-                        <button id='$id' class='btn btn-primary btn-sm' onclick='visProprietario($id)' >Vizualizar</button>
-                        <button id='$id' class='btn btn-warning btn-sm' onclick='editProprietarioDados($id)' >Editar</button>
-                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarProprietarioDados($id)' >Eliminar</button>
+                        <button id='$id' class='btn btn-primary btn-sm' onclick='visProprietario($id)' >
+                            <i class='fas fa-eye'></i>
+                        </button>
+                        <button id='$id' class='btn btn-warning btn-sm' onclick='editProprietarioDados($id)' >
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <button id='$id' class='btn btn-danger btn-sm' onclick='apagarProprietarioDados($id)' >
+                            <i class='fas fa-trash'></i>
+                        </button>
                     </td>
                 </tr>";
     }
