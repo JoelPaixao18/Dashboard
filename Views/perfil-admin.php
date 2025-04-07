@@ -62,17 +62,26 @@
 			<li>
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
-					<li><a href="../Views/perfil-admin.php"> Perfil </a></li>
+					<li><a href="#"> Perfil </a></li>
 					<li><a href="../Models/logout.php"> Sair </a></li>
 				</ul>
 			</li>
+            <li class="divider" data-text="settings"> Configurações </li>
+			<li>
+				<a href="#"><i class="bi bi-gear icon"></i> Settings <i class='bx bx-chevron-right icon-right' ></i></a>
+				<ul class="side-dropdown">
+					<li><a href="#" class="side-dropdown"><i class="bi bi-key icon"></i> Conta </a>
+                    </li>
+					<li><a href="#"><i class="bi bi-question-circle icon"></i> Ajuda </a></li>
+				</ul>
+			</li>
 		</ul>
-		<div class="ads">
+		<!--<div class="ads">
 			<div class="wrapper">
 				<a href="../Views/dash.php" class="btn-upgrade">Atualizar</a>
-				<!--<p>torne se <span>PRO</span> um membro <span>Aproveite os recursos</span></p>-->
+				<p>torne se <span>PRO</span> um membro <span>Aproveite os recursos</span></p>
 			</div>
-		</div>
+		</div>-->
 	</section>
 	<!-- SIDEBAR -->
 
@@ -110,86 +119,6 @@
 
 		<!-- MAIN -->
 		<main>
-			<h1 class="title">Dashboard</h1>
-			<ul class="breadcrumbs">
-				<li><a href="../Views/dash.php">inicio</a></li>
-				<li class="divider">/</li>
-				<li><a href="#" class="active">Dashboard</a></li>
-			</ul>
-			<!--==========================Adicionandos os Cards================================-->
-			<div class="info-data">
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>1500</h2>
-							<p>Proprietário</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="40%"></span>
-					<span class="label">40%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>234</h2>
-							<p>Usuários</p>
-						</div>
-						<i class='bx bx-trending-down icon down' ></i>
-					</div>
-					<span class="progress" data-value="60%"></span>
-					<span class="label">60%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>245</h2>
-							<p>Residências à Venda</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="35%"></span>
-					<span class="label">35%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>465</h2>
-							<p>Residências à Renda</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="75%"></span>
-					<span class="label">75%</span>
-				</div>
-			</div>
-			<!--==========================Adicionandos os Gráficos================================-->
-			<div class="data">
-				<div class="content-data">
-					<div class="head">
-						<h3>relatório de vendas e alugueres</h3>
-						<div class="menu">
-							<i class='bx bx-dots-horizontal-rounded icon'></i>
-							<ul class="menu-link">
-								<!--<li><a href="#">Edit</a></li>-->
-								<li><a href="#">Save</a></li>
-								<!--<li><a href="#">Remove</a></li>-->
-							</ul>
-						</div>
-					</div>
-					<div class="chart">
-						<div id="chart"></div>
-					</div>
-				</div>
-				<div class="graphBox">
-					<div class="box">
-						<canvas id="myChart"></canvas>
-					</div>
-					<div class="box">
-						<canvas id="earning"></canvas>
-					</div>
-				</div>
-			</div>
 			
 		</main>
 		<!-- MAIN -->
