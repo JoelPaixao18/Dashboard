@@ -5,7 +5,8 @@ function showForm(formId) {
 }
 
 var btnSignin = document.querySelector("#signin");
-var btnSignup = document.querySelector("#signup");
+var btnSignup = document.querySelector("#signup1");
+
 var body = document.querySelector("body");
 
 btnSignin.addEventListener("click", function() {

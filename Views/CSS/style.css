@@ -38,13 +38,8 @@ li {
 	list-style: none;
 }
 
-
-
-
-
-
-
 /* SIDEBAR */
+
 #sidebar {
 	position: fixed;
 	max-width: 260px;
@@ -89,6 +84,7 @@ li {
 	align-items: center;
 	margin-right: 6px;
 }
+
 /*---------------------------LOGO------------------------*/
 
 img {

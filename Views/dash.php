@@ -27,6 +27,8 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../Views/CSS/style.css">
 	<link rel="shortcut icon" href="../Views/Dashboard-main/img/logo_resin.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://icons.getbootstrap.com/">
 	<title>Painel Administrativo</title>
 </head>
 <body>
@@ -54,6 +56,15 @@
 					<li><a href="../Views/listarProprietarios.php">Listar Proprietários</a></li>
 					<li><a href="../Views/listarResidencias.php">Listar Residências</a></li>
 					<li><a href="../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
+				</ul>
+			</li>
+			<li class="divider" data-text="profile">Perfil</li>
+			<li>
+				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
+				<ul class="side-dropdown">
+					<li><a href="#"> Perfil </a></li>
+					<li><a href="#"> Definições </a></li>
+					<li><a href="../Models/logout.php"> Sair </a></li>
 				</ul>
 			</li>
 		</ul>
