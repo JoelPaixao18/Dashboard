@@ -73,7 +73,7 @@
 					<i class='bx bx-search icon' ></i>
 				</div>
 			</form>
-			<a href="../Models/gerar_relatorio_residencia.php" target="_blank" class="btn btn-outline-primary">
+			<a href="../Models/gerar_relatorio_residencia.php" target="_blank" class="btn btn btn-outline-light">
 				<i class='bx bxs-file-pdf icon' ></i>
 			</a>
 			<a href="#" class="nav-link">
@@ -131,44 +131,39 @@
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title fs-5" id="cadResidenciaModalLabel">Cadastrar Residência</h5>
+								<h5 class="modal-title fs-5" id="cadResidenciaModalLabel">Cadastrar Imóvel</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
 								<form id="cad-residencia-form">
 									<span id="msgAlertaErroCad"></span>
 									<div class="row mb-3">
-                                        <select name="zonamento" id="zonamento" class="form-select" aria-label="Default select example">
-                                            <option value="">----- Tipo de Residencia -----</option>
+                                        <select name="typology" id="typology" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Tipo de Imóvel -----</option>
                                             <option value="Residencia">Apartamento</option>
-                                            <option value="Residencia">Kitnet</option>
-                                            <option value="Residencia">Flat</option>
-                                            <option value="Residencia">Condomínio Residencial</option>
-                                            <option value="Residencia">Coberturas</option>
-                                            <option value="Residencia">Casas de Condomínio fechado</option>
-                                            <option value="Residencia">Apartamento padrão</option>
-                                            <option value="Residencia">Eco-Condomínio</option>
-                                            <option value="Residencia">Casa autoconstruída</option>
+                                            <option value="Residencia">Moradias</option>
+                                            <option value="Residencia">Vivenda</option>
+											<option value="Residencia">Outro</option>
                                         </select>
 									</div>
 									<div class="mb-3">
-										<label for="localizaco" class="col-form-label">Localização</label>
-										<input type="text" name="localizacao" class="form-control" id="localizacao" placeholder="Digite se Endereço" >
+										<label for="location" class="col-form-label">Localização</label>
+										<input type="text" name="location" class="form-control" id="location" placeholder="Digite se Endereço" >
 									</div>
                                     <div class="row mb-3">
-										<label for="preco" class="col-form-label">Valor Avaliado</label>
-										<input type="number" name="preco" class="form-control" id="preco" step="0.01" min="0" placeholder="Kz 0.00" >
+										<label for="price" class="col-form-label">Valor Avaliado</label>
+										<input type="number" name="price" class="form-control" id="price" step="0.01" min="15000" placeholder="Kz 0.00" >
 									</div>
                                     <div class="row mb-3">
 										<select name="status" id="status" class="form-select" aria-label="Default select example">
                                             <option value="">----- Estado da Residência ----</option>
                                             <option value="venda">Venda</option>
-                                            <option value="renda">Renda</option>
+                                            <option value="renda">Arrendamento</option>
                                         </select>
 									</div>
                                     <div class="row mb-3">
 										<label for="descricao" class="col-form-label">Descrição</label>
-										<input type="text" name="descricao" class="form-control" id="descricao" placeholder="Digite a descrição de Residência" >
+										<input type="text" name="descricao" class="form-control" id="descricao" placeholder="Digite a descrição adicional do imóvel" >
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -196,13 +191,13 @@
 									<dd class="col-sm-9"><span id="idResidencia"></span></dd>
 
 									<dt class="col-sm-3">Tipo de Resiência</dt>
-									<dd class="col-sm-9"><span id="zonamentoResidencia"></span></dd>
+									<dd class="col-sm-9"><span id="typologyResidencia"></span></dd>
 
 									<dt class="col-sm-3">Localização</dt>
-									<dd class="col-sm-9"><span id="localizacaoResidencia"></span></dd>
+									<dd class="col-sm-9"><span id="locationResidencia"></span></dd>
 
 									<dt class="col-sm-3">Valor Avaliado</dt>
-									<dd class="col-sm-9"><span id="precoResidencia"></span></dd>
+									<dd class="col-sm-9"><span id="priceResidencia"></span></dd>
 
 									<dt class="col-sm-3">Status</dt>
 									<dd class="col-sm-9"><span id="statusResidencia"></span></dd>
@@ -219,7 +214,7 @@
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title fs-5" id="editResidenciaModalLabel">Editar Residência</h5>
+								<h5 class="modal-title fs-5" id="editResidenciaModalLabel">Editar Imóvel</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
@@ -229,8 +224,8 @@
 									<input type="hidden" name="id" id="editid" >
 									
 									<div class="row mb-3">
-                                        <select name="zonamento" id="editzonamento" class="form-select" aria-label="Default select example">
-                                            <option value="">----- Tipo de Residencia -----</option>
+                                        <select name="typology" id="edittypology" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Tipo de Imóvel -----</option>
                                             <option value="Residencia">Apartamento</option>
                                             <option value="Residencia">Vivenda</option>
                                             <option value="Residencia">Maoradia</option>
@@ -238,23 +233,23 @@
                                         </select>
 									</div>
 									<div class="mb-3">
-										<label for="localizaco" class="col-form-label">Localização</label>
-										<input type="text" name="localizacao" class="form-control" id="editlocalizacao" placeholder="Digite se Endereço" >
+										<label for="location" class="col-form-label">Localização</label>
+										<input type="text" name="location" class="form-control" id="editlocation" placeholder="Digite se Endereço" >
 									</div>
                                     <div class="row mb-3">
-										<label for="preco" class="col-form-label">Valor Avaliado</label>
-										<input type="number" name="preco" class="form-control" id="editpreco" step="0.01" min="0" placeholder="Kz 0.00" >
+										<label for="price" class="col-form-label">Valor Avaliado</label>
+										<input type="number" name="price" class="form-control" id="editprice" step="0.01" min="1" placeholder="Kz 0.00" >
 									</div>
                                     <div class="row mb-3">
 										<select name="status" id="editstatus" class="form-select" aria-label="Default select example">
-                                            <option value="">----- Estado da Residência ----</option>
+                                            <option value="">----- Estado do Imóvel ----</option>
                                             <option value="venda">Venda</option>
-                                            <option value="renda">Renda</option>
+                                            <option value="renda">Arrendamento</option>
                                         </select>
 									</div>
                                     <div class="row mb-3">
 										<label for="descricao" class="col-form-label">Descrição</label>
-										<input type="text" name="descricao" class="form-control" id="editdescricao" placeholder="Digite a descrição de Residência" >
+										<input type="text" name="descricao" class="form-control" id="editdescricao" placeholder="Digite a descrição adicional do imóvel" >
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

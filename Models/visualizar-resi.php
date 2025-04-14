@@ -16,7 +16,7 @@
         $retornar = ['erro' => false, 'dados' => $row_residencia];
     
     } else {
-        $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Nenhum Residência encontardo!</div>"];
+        $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Nenhum Imóvel encontardo!</div>"];
     }
 
     echo json_encode($retornar);

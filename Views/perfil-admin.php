@@ -24,11 +24,19 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://icons.getbootstrap.com/icons/trash3-fill/">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../Views/CSS/style.css">
-	<link rel="shortcut icon" href="../Views/Dashboard-main/img/logo_resin.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://icons.getbootstrap.com/">
+	<link rel="stylesheet" href="../Views/CSS/style.css">
+	<link rel="stylesheet" href="../Views/CSS/styles-dash.css">
+	<link rel="shortcut icon" href="../Views/Dashboard-main/img/logo_resin.ico">
+	<link rel="stylesheet" href="../Views/CSS/style-perfil.css">
 	<title>Painel Administrativo</title>
 </head>
 <body>
@@ -60,9 +68,10 @@
 			</li>
 			<li class="divider" data-text="profile">Perfil</li>
 			<li>
-				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
+				<a href="#"><i class="bi bi-person-fill icon"></i> Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
-					<li><a href="#"> Perfil </a></li>
+					<li><a href="#"> Vizualizar Perfil </a></li>
+					<li><a href="#"> Editar Perfil </a></li>
 					<li><a href="../Models/logout.php"> Sair </a></li>
 				</ul>
 			</li>
@@ -119,7 +128,27 @@
 
 		<!-- MAIN -->
 		<main>
-			
+            <div class="container">
+				
+                <div class="content">
+                    <form action="" class="form">
+                        <h2 class="title">Meu Perfil</h2>
+                        <label for="nome" class="label-input">
+							<i class="bi bi-person icon-modify"></i>
+                        	<input type="text" name="nome" placeholder="Nome Completo" required>
+						</label>
+                        <label for="email" class="label-input">
+							<i class="bi bi-envelope-at-fill icon-modify"></i>
+                        	<input type="email" name="email" placeholder="email@gmail.com" required>
+						</label>
+                        <label for="senha" class="label-input">
+							<i class="bi bi-lock icon-modify"></i>
+                        	<input type="password" name="senha" placeholder="* * * * * * *" required>
+						</label>
+                    </form>
+                </div>
+
+            </div>
 		</main>
 		<!-- MAIN -->
 	</section>

@@ -10,7 +10,7 @@ if (!empty($pagina)) {
     $inicio = ($pagina - 1) * $qnt_result_pg;
 
     // Consulta para listar proprietários com limite e offset
-    $query_residencias = "SELECT id, zonamento, localizacao, preco, status, descricao FROM residencia ORDER BY id DESC LIMIT :inicio, :qnt_result_pg";
+    $query_residencias = "SELECT id, typology, location, price, status, descricao FROM residencia ORDER BY id DESC LIMIT :inicio, :qnt_result_pg";
     $result_residencias = $conn->prepare($query_residencias);
     $result_residencias->bindParam(':inicio', $inicio, PDO::PARAM_INT);
     $result_residencias->bindParam(':qnt_result_pg', $qnt_result_pg, PDO::PARAM_INT);
@@ -35,9 +35,9 @@ if (!empty($pagina)) {
         extract($row_residencia);
         $dados .= "<tr>
                     <td>$id</td>
-                    <td>$zonamento</td>
-                    <td>$localizacao</td>
-                    <td>$preco</td>
+                    <td>$typology</td>
+                    <td>$location</td>
+                    <td>$price</td>
                     <td>$status</td>
                     <td>$descricao</td>
                     <td>

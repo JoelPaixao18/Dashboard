@@ -11,13 +11,13 @@
         $result_residencia->execute();
 
         if ($result_residencia->execute()){
-            $retornar = ['erro' => false, 'msg' => "<div class='alert alert-success' role='alert'>Residência apagado com sucesso!</div>"];
+            $retornar = ['erro' => false, 'msg' => "<div class='alert alert-success' role='alert'>Imóvel apagado com sucesso!</div>"];
         } else {
-            $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Residência não apagado com sucesso!</div>"];
+            $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro ao apagar Imóvel!</div>"];
         }
 
     } else {
-        $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Nenhum Residência encontardo!</div>"];
+        $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Nenhum Imóvel encontardo!</div>"];
     }
 
     echo json_encode($retornar);

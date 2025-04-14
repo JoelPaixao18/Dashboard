@@ -73,7 +73,7 @@
 					<i class='bx bx-search icon' ></i>
 				</div>
 			</form>
-			<a href="../Models/gerar_relatorio_proprietario.php" target="_blank" class="btn btn-outline-primary">
+			<a href="../Models/gerar_relatorio_proprietario.php" target="_blank" class="btn btn btn-outline-light">
 				<i class='bx bxs-file-pdf icon' ></i>
 			</a>
 			<a href="#" class="nav-link">

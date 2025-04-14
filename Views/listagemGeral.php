@@ -77,7 +77,7 @@
 					</button>
 				</div>
 			</form>
-			<a href="#" target="_blank" class="btn btn-outline-primary">
+			<a href="#" target="_blank" class="btn btn btn-outline-light">
 				<i class='bx bxs-file-pdf icon' ></i>
 			</a>
 			<a href="#" class="nav-link">

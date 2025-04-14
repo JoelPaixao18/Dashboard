@@ -16,7 +16,7 @@ $result_residencias = $conn->prepare($query_residencias);
 $result_residencias->execute();
 
 // Construção do HTML do relatório
-$html = '<h1 style="text-align: center;">Relatório das Residências</h1>';
+$html = '<h1 style="text-align: center;">Relatório dos Imóveis</h1>';
 $html .= '<table border="1" width="100%" style="border-collapse: collapse;">
              <tr>
                  <th>ID</th>

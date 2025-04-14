@@ -19,11 +19,11 @@ cadForm.addEventListener('submit', async (e) => {
 
     document.getElementById("cad-residencia-btn").value = "Salvando...";
 
-    if(document.getElementById("zonamento").value === ""){
+    if(document.getElementById("typology").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário selecionar o Tipo de Residência!</div>";
-    } else if(document.getElementById("localizacao").value === ""){
+    } else if(document.getElementById("location").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário pôr a sua Localização!</div>";
-    } else if(document.getElementById("preco").value === ""){
+    } else if(document.getElementById("price").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário definir um Preço (Valor Avaliado)!</div>";
     } else if(document.getElementById("status").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário definir o Estado da Residênncia!</div>";
@@ -67,9 +67,9 @@ async function visResidencia(id) {
         visModal.show();
 
         document.getElementById("idResidencia").innerHTML = resposta['dados'].id;
-        document.getElementById("zonamentoResidencia").innerHTML = resposta['dados'].zonamento;
-        document.getElementById("localizacaoResidencia").innerHTML = resposta['dados'].localizacao;
-        document.getElementById("precoResidencia").innerHTML = resposta['dados'].preco;
+        document.getElementById("typologyResidencia").innerHTML = resposta['dados'].zonamento;
+        document.getElementById("locationResidencia").innerHTML = resposta['dados'].localizacao;
+        document.getElementById("priceResidencia").innerHTML = resposta['dados'].preco;
         document.getElementById("statusResidencia").innerHTML = resposta['dados'].status;
         document.getElementById("descricaoResidencia").innerHTML = resposta['dados'].descricao;
     }
