@@ -117,7 +117,7 @@
 						<div class="col-lg-12 d-flex justify-content-between align-items-center">
 							<div class="">
 								<!-- Button trigger modal -->
-								<button type="button" style="margin-left: 126vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadUsuarioModal">
+								<button type="button" style="margin-left: 123vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadUsuarioModal">
 									Cadastrar Usuário
 								</button>
 							</div>

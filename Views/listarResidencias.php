@@ -111,7 +111,7 @@
 						<div class="col-lg-12 d-flex justify-content-between align-items-center">
 							<div class="">
 								<!-- Button trigger modal -->
-								<button type="button" style="margin-left: 125vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadResidenciaModal">
+								<button type="button" style="margin-left: 119vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadResidenciaModal">
 									Cadastrar Residências
 								</button>
 							</div>
@@ -138,12 +138,23 @@
 								<form id="cad-residencia-form">
 									<span id="msgAlertaErroCad"></span>
 									<div class="row mb-3">
-                                        <select name="typology" id="typology" class="form-select" aria-label="Default select example">
+										<label for="typology" class="col-form-label">Tipo de Imóvel</label>
+                                        <select name="typeResi" id="typeResi" class="form-select" aria-label="Default select example">
                                             <option value="">----- Tipo de Imóvel -----</option>
-                                            <option value="Residencia">Apartamento</option>
-                                            <option value="Residencia">Moradias</option>
-                                            <option value="Residencia">Vivenda</option>
-											<option value="Residencia">Outro</option>
+                                            <option value="Apartamento">Apartamento</option>
+                                            <option value="Moradia">Moradias</option>
+                                            <option value="Vivenda">Vivenda</option>
+											<option value="Outro">Outro</option>
+                                        </select>
+									</div>
+									<div class="row mb-3">
+										<label for="typology" class="col-form-label">Tipologia do Imóvel</label>
+                                        <select name="typology" id="edittypology" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Tipologia do Imóvel -----</option>
+                                            <option value="T2">T2</option>
+                                            <option value="T3">T3</option>
+                                            <option value="T4">T4</option>
+                                            <option value="Outro">Outro</option>
                                         </select>
 									</div>
 									<div class="mb-3">
@@ -157,13 +168,9 @@
                                     <div class="row mb-3">
 										<select name="status" id="status" class="form-select" aria-label="Default select example">
                                             <option value="">----- Estado da Residência ----</option>
-                                            <option value="venda">Venda</option>
-                                            <option value="renda">Arrendamento</option>
+                                            <option value="Venda">Venda</option>
+                                            <option value="Arrendamento">Arrendamento</option>
                                         </select>
-									</div>
-                                    <div class="row mb-3">
-										<label for="descricao" class="col-form-label">Descrição</label>
-										<input type="text" name="descricao" class="form-control" id="descricao" placeholder="Digite a descrição adicional do imóvel" >
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -190,7 +197,10 @@
 									<dt class="col-sm-3">ID</dt>
 									<dd class="col-sm-9"><span id="idResidencia"></span></dd>
 
-									<dt class="col-sm-3">Tipo de Resiência</dt>
+									<dt class="col-sm-3">Tipo de Imóvel</dt>
+									<dd class="col-sm-9"><span id="typeResiResidencia"></span></dd>
+
+									<dt class="col-sm-3">Tipologia do Imóvel</dt>
 									<dd class="col-sm-9"><span id="typologyResidencia"></span></dd>
 
 									<dt class="col-sm-3">Localização</dt>
@@ -202,8 +212,6 @@
 									<dt class="col-sm-3">Status</dt>
 									<dd class="col-sm-9"><span id="statusResidencia"></span></dd>
 
-									<dt class="col-sm-3">Descrição</dt>
-									<dd class="col-sm-9"><span id="descricaoResidencia"></span></dd>
 								</dl>
 							</div>
 						</div>
@@ -224,12 +232,23 @@
 									<input type="hidden" name="id" id="editid" >
 									
 									<div class="row mb-3">
-                                        <select name="typology" id="edittypology" class="form-select" aria-label="Default select example">
+										<label for="typology" class="col-form-label">Tipo de Imóvel</label>
+                                        <select name="typeResi" id="edittypeResi" class="form-select" aria-label="Default select example">
                                             <option value="">----- Tipo de Imóvel -----</option>
-                                            <option value="Residencia">Apartamento</option>
-                                            <option value="Residencia">Vivenda</option>
-                                            <option value="Residencia">Maoradia</option>
-                                            <option value="Residencia">Outro</option>
+                                            <option value="Apartamento">Apartamento</option>
+                                            <option value="Vivenda">Vivenda</option>
+                                            <option value="Moradia">Maoradia</option>
+                                            <option value="Outro">Outro</option>
+                                        </select>
+									</div>
+									<div class="row mb-3">
+										<label for="typology" class="col-form-label">Tipologia do Imóvel</label>
+                                        <select name="typology" id="edittypology" class="form-select" aria-label="Default select example">
+                                            <option value="">----- Tipologia do Imóvel -----</option>
+                                            <option value="T2">T2</option>
+                                            <option value="T3">T3</option>
+                                            <option value="T4">T4</option>
+                                            <option value="Outro">Outro</option>
                                         </select>
 									</div>
 									<div class="mb-3">
@@ -243,17 +262,13 @@
                                     <div class="row mb-3">
 										<select name="status" id="editstatus" class="form-select" aria-label="Default select example">
                                             <option value="">----- Estado do Imóvel ----</option>
-                                            <option value="venda">Venda</option>
-                                            <option value="renda">Arrendamento</option>
+                                            <option value="Venda">Venda</option>
+                                            <option value="Arrendamento">Arrendamento</option>
                                         </select>
-									</div>
-                                    <div class="row mb-3">
-										<label for="descricao" class="col-form-label">Descrição</label>
-										<input type="text" name="descricao" class="form-control" id="editdescricao" placeholder="Digite a descrição adicional do imóvel" >
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-										<input type="submit" class="btn btn-success" id="edit-residencia-btn" value="Cadastrar"/>
+										<input type="submit" class="btn btn-success" id="edit-residencia-btn" value="Editar"/>
 									</div>
 								</form>
 							</div>

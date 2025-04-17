@@ -10,7 +10,7 @@ if (!empty($pagina)) {
     $inicio = ($pagina - 1) * $qnt_result_pg;
 
     // Consulta para listar proprietários com limite e offset
-    $query_residencias = "SELECT id, typology, location, price, status, descricao FROM residencia ORDER BY id DESC LIMIT :inicio, :qnt_result_pg";
+    $query_residencias = "SELECT id, typeResi, typology, location, price, status FROM residencia ORDER BY id DESC LIMIT :inicio, :qnt_result_pg";
     $result_residencias = $conn->prepare($query_residencias);
     $result_residencias->bindParam(':inicio', $inicio, PDO::PARAM_INT);
     $result_residencias->bindParam(':qnt_result_pg', $qnt_result_pg, PDO::PARAM_INT);
@@ -21,11 +21,11 @@ if (!empty($pagina)) {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tipo de Residêcia</th>
+                            <th>Tipo de Imóvel</th>
+                            <th>Tipologia do Imóvel</th>
                             <th>Localização</th>
                             <th>Valor Avaliado</th>
                             <th>Status</th>
-                            <th>Descrição</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -35,11 +35,11 @@ if (!empty($pagina)) {
         extract($row_residencia);
         $dados .= "<tr>
                     <td>$id</td>
+                    <td>$typeResi</td>
                     <td>$typology</td>
                     <td>$location</td>
                     <td>$price</td>
                     <td>$status</td>
-                    <td>$descricao</td>
                     <td>
                         <button id='$id' class='btn btn-primary btn-sm' onclick='visResidencia($id)' >
                             <i class='fas fa-eye'></i>

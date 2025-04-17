@@ -11,7 +11,7 @@ $options->set('defaultFont', 'Arial');
 $dompdf = new Dompdf($options);
 
 // Consulta ao banco de dados
-$query_residencias = "SELECT id, zonamento, localizacao, preco, status, descricao FROM residencia ORDER BY id ASC";
+$query_residencias = "SELECT id, typeResi, typology, location, price, status FROM residencia ORDER BY id ASC";
 $result_residencias = $conn->prepare($query_residencias);
 $result_residencias->execute();
 
@@ -20,21 +20,21 @@ $html = '<h1 style="text-align: center;">Relatório dos Imóveis</h1>';
 $html .= '<table border="1" width="100%" style="border-collapse: collapse;">
              <tr>
                  <th>ID</th>
-                 <th>Tipo de Residencia</th>
+                 <th>Tipo de Imóvel</th>
+                 <th>Tipologia do Imóvel
                  <th>Localização</th>
                  <th>Valor Avaliado</th>
                 <th>Status</th>
-                <th>Descrição</th>
              </tr>';
 
 while ($row_residencia = $result_residencias->fetch(PDO::FETCH_ASSOC)) {
     $html .= '<tr>
                  <td>' . $row_residencia['id'] . '</td>
-                 <td>' . $row_residencia['zonamento'] . '</td>
-                 <td>' . $row_residencia['localizacao'] . '</td>
-                 <td>' . $row_residencia['preco'] . '</td>
+                 <td>' . $row_residencia['typeResi'] . '</td>
+                 <td>' . $row_residencia['typology'] . '</td>
+                 <td>' . $row_residencia['location'] . '</td>
+                 <td>' . $row_residencia['price'] . '</td>
                 <td>' . $row_residencia['status'] . '</td>
-                <td>' . $row_residencia['descricao'] . '</td>
               </tr>';
 }
 

@@ -19,16 +19,16 @@ cadForm.addEventListener('submit', async (e) => {
 
     document.getElementById("cad-residencia-btn").value = "Salvando...";
 
-    if(document.getElementById("typology").value === ""){
-        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário selecionar o Tipo de Residência!</div>";
+    if(document.getElementById("typeResi").value === ""){
+        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário selecionar o Tipo de Imóvel!</div>";
+    } if(document.getElementById("typology").value === ""){
+        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário selecionar o Tipologia do Imóvel!</div>";
     } else if(document.getElementById("location").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário pôr a sua Localização!</div>";
     } else if(document.getElementById("price").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário definir um Preço (Valor Avaliado)!</div>";
     } else if(document.getElementById("status").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário definir o Estado da Residênncia!</div>";
-    } else if(document.getElementById("descricao").value === ""){
-        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário descrever a Residência!</div>";
     } else {
 
         const dadosForm = new FormData(cadForm);
@@ -67,11 +67,11 @@ async function visResidencia(id) {
         visModal.show();
 
         document.getElementById("idResidencia").innerHTML = resposta['dados'].id;
-        document.getElementById("typologyResidencia").innerHTML = resposta['dados'].zonamento;
-        document.getElementById("locationResidencia").innerHTML = resposta['dados'].localizacao;
-        document.getElementById("priceResidencia").innerHTML = resposta['dados'].preco;
+        document.getElementById("typeResiResidencia").innerHTML = resposta['dados'].typeResi;
+        document.getElementById("typologyResidencia").innerHTML = resposta['dados'].typology;
+        document.getElementById("locationResidencia").innerHTML = resposta['dados'].location;
+        document.getElementById("priceResidencia").innerHTML = resposta['dados'].price;
         document.getElementById("statusResidencia").innerHTML = resposta['dados'].status;
-        document.getElementById("descricaoResidencia").innerHTML = resposta['dados'].descricao;
     }
 }
 
@@ -90,18 +90,18 @@ async function editResidenciaDados(id) {
         const editModal = new bootstrap.Modal(document.getElementById("editResidenciaModal"));
         editModal.show();
         document.getElementById("editid").value = resposta['dados'].id;
-        document.getElementById("editzonamento").value = resposta['dados'].zonamento;
-        document.getElementById("editlocalizacao").value = resposta['dados'].localizacao;
-        document.getElementById("editpreco").value = resposta['dados'].preco;
+        document.getElementById("edittypeResi").value = resposta['dados'].typeResi;
+        document.getElementById("edittypology").innerHTML = resposta['dados'].typology;
+        document.getElementById("editlocation").value = resposta['dados'].location;
+        document.getElementById("editprice").value = resposta['dados'].price;
         document.getElementById("editstatus").value = resposta['dados'].status;
-        document.getElementById("editdescricao").value = resposta['dados'].descricao;
     }
 }
 
 editForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    document.getElementById("edit-residencia-btn").value = "Salvando...";
+    document.getElementById("edit-residencia-btn").value = "Editando...";
 
     const dadosForm = new FormData(editForm);
     console.log(dadosForm);
@@ -125,7 +125,7 @@ editForm.addEventListener('submit', async (e) => {
         listarResidencias(1);
     }
 
-    document.getElementById("edit-residencia-btn").value = "Salvar";
+    document.getElementById("edit-residencia-btn").value = "Editar";
 });
 
 // --------------- CRUD - Deleter (Usuário) ---------------------

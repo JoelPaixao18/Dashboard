@@ -5,7 +5,7 @@
 
     if (!empty($id)) {
 
-        $query_residencia = "SELECT id, zonamento, localizacao, preco, status, descricao FROM residencia WHERE id = :id LIMIT 1";
+        $query_residencia = "SELECT id, typeResi, typology, location, price, status FROM residencia WHERE id = :id LIMIT 1";
         $result_residencia = $conn->prepare($query_residencia);
         $result_residencia->bindParam('id', $id);
         $result_residencia->execute();

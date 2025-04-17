@@ -111,7 +111,7 @@
 						<div class="col-lg-12 d-flex justify-content-between align-items-center">
 							<div class="">
 								<!-- Button trigger modal -->
-								<button type="button" style="margin-left: 125vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadProprietarioModal">
+								<button type="button" style="margin-left: 119vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadProprietarioModal">
 									Cadastrar Proprietários
 								</button>
 							</div>
