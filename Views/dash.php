@@ -17,6 +17,21 @@
 	function isActiveForm($formName, $activeForm) {
 		return $formName === $activeForm ? 'active' : '';
 	}
+
+	include_once '../Config/conection.php';
+
+	// Total de usuários
+
+	$stmt = $conn->query("SELECT COUNT(*) AS total FROM usuario");
+	$usuarios = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+	// Residências à venda
+	$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'venda'");
+	$venda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+	// Residências à renda
+	$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'arrendamento'");
+	$renda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 ?>
 
 <!DOCTYPE html>
@@ -118,51 +133,44 @@
 			</ul>
 			<!--==========================Adicionandos os Cards================================-->
 			<div class="info-data">
+
 				<div class="card">
 					<div class="head">
 						<div>
-							<h2>1500</h2>
-							<p>Proprietário</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="40%"></span>
-					<span class="label">40%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>234</h2>
+							<h2><?= $usuarios ?></h2>
 							<p>Usuários</p>
 						</div>
-						<i class='bx bx-trending-down icon down' ></i>
+						<i class='bx bx-trending-down icon down'></i>
 					</div>
-					<span class="progress" data-value="60%"></span>
-					<span class="label">60%</span>
+					<span class="progress" data-value="<?= round($percentUsuarios) ?>%"></span>
+					<span class="label"><?= round($percentUsuarios) ?>%</span>
 				</div>
+
 				<div class="card">
 					<div class="head">
 						<div>
-							<h2>245</h2>
-							<p>Residências à Venda</p>
+							<h2><?= $venda ?></h2>
+							<p>Imóveis à Venda</p>
 						</div>
-						<i class='bx bx-trending-up icon' ></i>
+						<i class='bx bx-trending-up icon'></i>
 					</div>
-					<span class="progress" data-value="35%"></span>
-					<span class="label">35%</span>
+					<span class="progress" data-value="<?= round($percentVenda) ?>%"></span>
+					<span class="label"><?= round($percentVenda) ?>%</span>
 				</div>
+
 				<div class="card">
 					<div class="head">
 						<div>
-							<h2>465</h2>
-							<p>Residências à Renda</p>
+							<h2><?= $renda ?></h2>
+							<p>Imóveis em Arrendamento</p>
 						</div>
-						<i class='bx bx-trending-up icon' ></i>
+						<i class='bx bx-trending-up icon'></i>
 					</div>
-					<span class="progress" data-value="75%"></span>
-					<span class="label">75%</span>
+					<span class="progress" data-value="<?= round($percentRenda) ?>%"></span>
+					<span class="label"><?= round($percentRenda) ?>%</span>
 				</div>
 			</div>
+
 			<!--==========================Adicionandos os Gráficos================================-->
 			<div class="data">
 				<div class="content-data">

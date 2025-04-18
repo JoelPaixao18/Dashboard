@@ -161,7 +161,7 @@ allProgress.forEach(item=> {
 // APEXCHART
 var options = {
   series: [{
-    name: 'Aluguer',
+    name: 'Arrendamento',
     data: [30, 45, 35, 60, 50, 120, 110, 90, 80, 70, 60, 50] // Dados mensais
   }, {
     name: 'Venda',

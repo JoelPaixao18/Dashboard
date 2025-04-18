@@ -16,7 +16,8 @@ $result_usuarios = $conn->prepare($query_usuarios);
 $result_usuarios->execute();
 
 // Construção do HTML do relatório
-$html = '<h1 style="text-align: center;">Relatório de Usuários</h1>';
+$html = '<img src="../Views/imgs/logo_resi.png" alt="Logo">';
+$html = '<h1 style="text-align: center;"> Usuários Cadastrados na API</h1>';
 $html .= '<table border="1" width="100%" style="border-collapse: collapse;">
              <tr>
                  <th>ID</th>
