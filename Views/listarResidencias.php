@@ -1,3 +1,14 @@
+<?php
+	include_once '../Config/conection.php';
+
+	session_start();
+
+	// Modifique a verificação para não interromper o carregamento dos dados
+	if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+		header("Location: ../Views/index.php");
+		exit();
+	}
+?>
 <!DOCTYPE html>
 <html lang="pt-en">
 <head>
@@ -49,7 +60,7 @@
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
 					<li><a href="../Views/perfil-admin.php"> Perfil </a></li>
-					<li><a href="../Models/logout.php"> Sair </a></li>
+					<li><a href="../Models/logout.php"> Terminar Sessão </a></li>
 				</ul>
 			</li>
 		</ul>
@@ -67,10 +78,12 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu toggle-sidebar' ></i>
-			<form action="#">
-				<div class="form-group">
-					<input type="text" placeholder="Pesquisar Residências...">
-					<i class='bx bx-search icon' ></i>
+			<form id="searchForm" onsubmit="event.preventDefault(); filterUsers();" class="d-flex align-items-center">
+				<div class="input-group" style="width: 300px; margin-top: 1.5rem; height: 38px;">
+					<input type="search" id="searchInput" class="form-control border-end-0 h-100" style="margin-top: -0.5rem;" placeholder="Pesquisar Imoveis...">
+					<button type="submit" class="btn btn-primary border-start-0 h-100 px-3 d-flex align-items-center justify-content-center" style="margin-top: -0.5rem;">
+						<i class='bx bx-search icon'></i>
+					</button>
 				</div>
 			</form>
 			<a href="../Models/gerar_relatorio_residencia.php" target="_blank" class="btn btn btn-outline-light">
@@ -84,14 +97,37 @@
 				<i class='bx bxs-message-square-dots icon' ></i>
 				<span class="badge">8</span>
 			</a>
-			<span class="divider"></span>
 			<div class="profile">
-				<img src="../Views/Dashboard-main/img/IMG-20241121-WA0048.jpg" alt="">
+				<?php
+				$nomeAdmin = htmlspecialchars($_SESSION['nome'] ?? 'Admin');
+				$partesNome = array_filter(explode(' ', $nomeAdmin)); // Remove valores vazios
+				
+				$iniciais = '';
+				if (!empty($partesNome)) {
+					$iniciais .= strtoupper(substr($partesNome[0], 0, 1));
+					if (count($partesNome) > 1) {
+						$iniciais .= strtoupper(substr(end($partesNome), 0, 1));
+					}
+				}
+				?>
+				
+				<div class="profile-initials" style="
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					background: #4e73df;
+					color: white;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: bold;
+					font-size: 16px;
+				"><?= $iniciais ?: 'AD' ?></div>
 				
 				<ul class="profile-link">
-					<li><a href="#"><i class='bx bxs-user-circle icon' ></i> Profil</a></li>
-					<li><a href="#"><i class='bx bxs-cog' ></i> Settings</a></li>
-					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle' ></i> sair</a></li>
+					<li><a href="#"><i class='bx bxs-user-circle icon'></i> Perfil</a></li>
+					<li><a href="#"><i class='bx bxs-cog'></i> Configurações</a></li>
+					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle'></i> Sair</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -138,23 +174,13 @@
 								<form id="cad-residencia-form">
 									<span id="msgAlertaErroCad"></span>
 									<div class="row mb-3">
-										<label for="typology" class="col-form-label">Tipo de Imóvel</label>
+										<label for="typeResi" class="col-form-label">Tipo de Imóvel</label>
                                         <select name="typeResi" id="typeResi" class="form-select" aria-label="Default select example">
                                             <option value="">----- Tipo de Imóvel -----</option>
                                             <option value="Apartamento">Apartamento</option>
-                                            <option value="Moradia">Moradias</option>
+                                            <option value="Moradia">Moradia</option>
                                             <option value="Vivenda">Vivenda</option>
 											<option value="Outro">Outro</option>
-                                        </select>
-									</div>
-									<div class="row mb-3">
-										<label for="typology" class="col-form-label">Tipologia do Imóvel</label>
-                                        <select name="typology" id="edittypology" class="form-select" aria-label="Default select example">
-                                            <option value="">----- Tipologia do Imóvel -----</option>
-                                            <option value="T2">T2</option>
-                                            <option value="T3">T3</option>
-                                            <option value="T4">T4</option>
-                                            <option value="Outro">Outro</option>
                                         </select>
 									</div>
 									<div class="mb-3">
@@ -295,5 +321,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<script src="../js/script.js"></script>
 	<script src="../js/custom-resi.js"></script>
+	<script src="../js/apartament-fields.js"></script>
+	<script src="../js/vivenda-fields.js"></script>
 </body>
 </html>

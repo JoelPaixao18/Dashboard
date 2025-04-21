@@ -45,33 +45,35 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    // Buscando o usuário no banco de dados com o email fornecido
     $stmt = $conn->prepare("SELECT * FROM usuario WHERE email = :email");
     $stmt->execute(['email' => $email]);
+    
     if ($stmt->rowCount() > 0) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Verificando a senha
         if (password_verify($senha, $user['senha'])) {
+            // Armazena TODOS os dados necessários na sessão
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['nome'] = $user['nome'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['loggedin'] = true; // Flag importante
+
+            // Debug: Verifique os dados da sessão
+            error_log("Dados da sessão: " . print_r($_SESSION, true));
 
             if ($user['role'] === 'admin') {
                 header("Location: ../Views/dash.php");
                 exit();
             } else {
-                $_SESSION['login_error'] = 'Acesso negado! Apenas administradores podem acessar esta área.';
-                $_SESSION['active_form'] = 'login';
+                $_SESSION['login_error'] = 'Apenas administradores podem acessar';
                 header("Location: ../Views/index.php");
                 exit();
             }
         }
     }
 
-    // Caso a senha esteja incorreta
-    $_SESSION['login_error'] = 'Email ou Senha incorreto!';
-    $_SESSION['active_form'] = 'login';
+    $_SESSION['login_error'] = 'Credenciais inválidas';
     header("Location: ../Views/index.php");
     exit();
 }

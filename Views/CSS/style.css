@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
 
 * {
 	font-family: 'Open Sans', sans-serif;
@@ -102,6 +103,84 @@ img {
 img {
     display: block; /* Faz a imagem aparecer normalmente quando a navegação estiver expandida */
 }
+
+/*---------------------------Iniciais dos nomes - Perfil------------------------*/
+
+.profile-initials {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/*---------------------------Graficos------------------------*/
+
+#chart {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 16px;
+}
+
+.apexcharts-tooltip {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+    border-radius: 8px !important;
+}
+
+/* Estilo para o campo de pesquisa e botão */
+#searchForm .input-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+#searchForm .input-group:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#searchInput {
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-right: none;
+}
+
+#searchInput:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #4e73df;
+}
+
+#searchForm .btn-primary {
+    padding: 10px 15px;
+    background-color: #4e73df;
+    border-color: #4e73df;
+    transition: all 0.3s ease;
+}
+
+#searchForm .btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+#searchForm .btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Estilo para o ícone */
+#searchForm .bx-search {
+    font-size: 1.1rem;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
 #sidebar .icon-right {
 	margin-left: auto;
 	transition: all .3s ease;

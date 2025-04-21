@@ -1,3 +1,4 @@
+// Elementos DOM
 const tbody = document.querySelector('.listar-usuarios');
 const cadForm = document.getElementById("cad-usuario-form");
 const editForm = document.getElementById("edit-usuario-form");
@@ -5,14 +6,90 @@ const msgAlertaErroCad = document.getElementById("msgAlertaErroCad");
 const msgAlertaErroEdit = document.getElementById("msgAlertaErroEdit");
 const msgAlerta = document.getElementById("msgAlerta");
 const cadModal = new bootstrap.Modal(document.getElementById("cadUsuarioModal"));
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
 
+// Variável global para armazenar o termo de pesquisa
+let currentSearchTerm = '';
+
+// Função principal para listar usuários
 const listarUsuarios = async (pagina) => {
-    const dados = await fetch('../Controllers/list.php?pagina=' + pagina);
-    const resposta = await dados.text();
-    tbody.innerHTML = resposta;
+    try {
+        const url = `../Controllers/list.php?pagina=${pagina}${currentSearchTerm ? `&search=${encodeURIComponent(currentSearchTerm)}` : ''}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error('Erro ao carregar dados');
+        }
+        
+        const resposta = await response.text();
+        tbody.innerHTML = resposta;
+        
+        // Reaplica os event listeners
+        reapplynEventListeners();
+    } catch (error) {
+        console.error('Erro:', error);
+        msgAlerta.innerHTML = `<div class="alert alert-danger">Erro ao carregar dados: ${error.message}</div>`;
+    }
 }
 
-listarUsuarios(1);
+// Função para reaplicar event listeners
+function reapplynEventListeners() {
+    // Botões de ação
+    document.querySelectorAll('[onclick^="visUsuario"]').forEach(btn => {
+        const id = btn.id;
+        btn.onclick = (e) => {
+            e.preventDefault();
+            visUsuario(id);
+        };
+    });
+    
+    document.querySelectorAll('[onclick^="editUsuarioDados"]').forEach(btn => {
+        const id = btn.id;
+        btn.onclick = (e) => {
+            e.preventDefault();
+            editUsuarioDados(id);
+        };
+    });
+    
+    document.querySelectorAll('[onclick^="apagarUsuarioDados"]').forEach(btn => {
+        const id = btn.id;
+        btn.onclick = (e) => {
+            e.preventDefault();
+            apagarUsuarioDados(id);
+        };
+    });
+    
+    // Links de paginação
+    document.querySelectorAll('.page-link').forEach(link => {
+        if (link.getAttribute('onclick')) {
+            const pageNum = link.getAttribute('onclick').match(/listarUsuarios\((\d+)\)/)[1];
+            link.onclick = null;
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                listarUsuarios(pageNum);
+            });
+        }
+    });
+}
+
+// Função de filtro
+async function filterUsers() {
+    currentSearchTerm = searchInput.value.trim();
+    await listarUsuarios(1);
+}
+
+// Event Listeners
+searchForm.addEventListener('submit', filterUsers);
+
+searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        filterUsers();
+    }
+});
+
+//CRUD --- Cadastrar Usuarios
 
 cadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -139,24 +216,7 @@ async function apagarUsuarioDados(id) {
     }
 }
 
-// --------------------- Pesquisa Dinamica -------------------------
-
-/*$(function() {
-    $("#pesquisa").autocomplete({
-        source: '../Models/pesquisa.php'
-    });
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    listarUsuarios(1);
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-    var searchInput = document.getElementById("searchInput");
-    var tableRows = document.querySelectorAll("#userTable tbody tr");
-
-    searchInput.addEventListener("keyup", function () {
-        var searchText = searchInput.value.toLowerCase();
-
-        tableRows.forEach(function (row) {
-            var rowText = row.textContent.toLocaleLowerCase();
-            row.style.display = rowText.includes(searchText) ? "" : "none";
-        });
-    });
-});*/

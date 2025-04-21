@@ -1,23 +1,5 @@
 <?php
-
 	session_start();
-
-	$errors = [
-		'login' => $_SESSION['login_error'] ?? '',
-		'signup' => $_SESSION['signup_error'] ?? ''
-	];
-	$activeForm = $_SESSION['active_form'] ?? 'login';
-
-	session_unset();
-
-	function showError($error) {
-		return !empty($error) ? "<p class='error_message'>$error</p>" : '';
-	}
-
-	function isActiveForm($formName, $activeForm) {
-		return $formName === $activeForm ? 'active' : '';
-	}
-
 	include_once '../Config/conection.php';
 
 	// Total de usuários
@@ -32,6 +14,12 @@
 	// Residências à renda
 	$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'arrendamento'");
 	$renda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+	// Modifique a verificação para não interromper o carregamento dos dados
+	if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+		header("Location: ../Views/index.php");
+		exit();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +66,7 @@
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
 					<li><a href="../Views/perfil-admin.php"> Perfil </a></li>
-					<li><a href="../Models/logout.php"> Sair </a></li>
+					<li><a href="../Models/logout.php"> Terminar Sessão </a></li>
 				</ul>
 			</li>
 		</ul>
@@ -110,14 +98,37 @@
 				<i class='bx bxs-message-square-dots icon' ></i>
 				<span class="badge">8</span>
 			</a>
-			<span class="divider"></span>
 			<div class="profile">
-				<img src="../Views/Dashboard-main/img/IMG-20241121-WA0048.jpg" alt="">
+				<?php
+				$nomeAdmin = htmlspecialchars($_SESSION['nome'] ?? 'Admin');
+				$partesNome = array_filter(explode(' ', $nomeAdmin)); // Remove valores vazios
+				
+				$iniciais = '';
+				if (!empty($partesNome)) {
+					$iniciais .= strtoupper(substr($partesNome[0], 0, 1));
+					if (count($partesNome) > 1) {
+						$iniciais .= strtoupper(substr(end($partesNome), 0, 1));
+					}
+				}
+				?>
+				
+				<div class="profile-initials" style="
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					background: #4e73df;
+					color: white;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: bold;
+					font-size: 16px;
+				"><?= $iniciais ?: 'AD' ?></div>
 				
 				<ul class="profile-link">
-					<li><a href="#"><i class='bx bxs-user-circle icon' ></i> Profil</a></li>
-					<li><a href="#"><i class='bx bxs-cog' ></i> Settings</a></li>
-					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle' ></i> sair</a></li>
+					<li><a href="#"><i class='bx bxs-user-circle icon'></i> Perfil</a></li>
+					<li><a href="#"><i class='bx bxs-cog'></i> Configurações</a></li>
+					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle'></i> Sair</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -175,7 +186,7 @@
 			<div class="data">
 				<div class="content-data">
 					<div class="head">
-						<h3>relatório de vendas e alugueres</h3>
+						<h3>Balanço Geral dos Gráficos</h3>
 						<div class="menu">
 							<i class='bx bx-dots-horizontal-rounded icon'></i>
 							<ul class="menu-link">
@@ -204,12 +215,218 @@
 	</section>
 	<!-- NAVBAR -->
 
+	<script>
+		// Debug avançado
+		console.log("Dados recebidos:", {
+			usuarios: <?= $usuarios ?>,
+			venda: <?= $venda ?>,
+			renda: <?= $renda ?>
+		});
+		// Gráfico ApexCharts
+		document.addEventListener('DOMContentLoaded', function() {
+			var options = {
+				series: [
+					{
+						name: 'Usuários',
+						data: [<?= $usuarios ?>],
+						color: '#6c5ce7'
+					},
+					{
+						name: 'Vendas',
+						data: [<?= $venda ?>],
+						color: '#00b894'
+					},
+					{
+						name: 'Arrendamentos',
+						data: [<?= $renda ?>],
+						color: '#fd79a8'
+					}
+				],
+				chart: {
+					type: 'line',
+					height: 380,
+					foreColor: '#333',
+					fontFamily: 'Roboto, sans-serif',
+					toolbar: {
+						show: true,
+						tools: {
+							download: true,
+							selection: false,
+							zoom: false,
+							zoomin: false,
+							zoomout: false,
+							pan: false,
+							reset: true
+						}
+					},
+					dropShadow: {
+						enabled: true,
+						top: 3,
+						left: 2,
+						blur: 4,
+						opacity: 0.1
+					}
+				},
+				stroke: {
+					width: 3,
+					curve: 'smooth',
+					lineCap: 'round'
+				},
+				markers: {
+					size: 6,
+					strokeWidth: 0,
+					hover: {
+						size: 8
+					}
+				},
+				grid: {
+					borderColor: '#f1f1f1',
+					padding: {
+						top: 20,
+						right: 20
+					}
+				},
+				xaxis: {
+					categories: ['Controle Geral'],
+					axisBorder: {
+						show: false
+					},
+					axisTicks: {
+						show: false
+					},
+					labels: {
+						style: {
+							fontSize: '14px',
+							fontWeight: 600
+						}
+					}
+				},
+				yaxis: {
+					min: 0,
+					tickAmount: 5,
+					labels: {
+						style: {
+							fontSize: '12px'
+						}
+					}
+				},
+				tooltip: {
+					shared: true,
+					intersect: false,
+					style: {
+						fontSize: '14px'
+					},
+					y: {
+						formatter: function(value) {
+							return value.toLocaleString() + ' registros';
+						}
+					},
+					marker: {
+						show: false
+					}
+				},
+				legend: {
+					position: 'top',
+					horizontalAlign: 'right',
+					fontSize: '14px',
+					itemMargin: {
+						horizontal: 20
+					},
+					markers: {
+						radius: 12
+					}
+				},
+				responsive: [{
+					breakpoint: 600,
+					options: {
+						chart: {
+							height: 300
+						},
+						legend: {
+							position: 'bottom'
+						}
+					}
+				}]
+			};
+
+			var chart = new ApexCharts(document.querySelector("#chart"), options);
+			chart.render();
+		});
+
+		// Reinicialização forçada dos gráficos
+		function initCharts() {
+
+			// 2. Gráficos Chart.js
+			if (typeof Chart !== 'undefined') {
+				// Gráfico 1
+				const ctx1 = document.getElementById('myChart').getContext('2d');
+				if (window.myChart) window.myChart.destroy();
+				window.myChart = new Chart(ctx1, {
+					type: 'bar',
+					data: {
+						labels: ['Venda', 'Arrendamento'],
+						datasets: [{
+							label: 'Imóveis',
+							data: [<?= $venda ?>, <?= $renda ?>],
+							backgroundColor: ['#4e73df', '#1cc88a']
+						}]
+					}
+				});
+
+				// Substitua o gráfico 'earning' por este código:
+				new Chart(document.getElementById('earning').getContext('2d'), {
+					type: 'bar',
+					data: {
+						labels: ['Usuários Registrados'],
+						datasets: [{
+							label: 'Total',
+							data: [<?= $usuarios ?>],
+							backgroundColor: '#4e73df',
+							borderColor: '#2e59d9',
+							borderWidth: 1
+						}]
+					},
+					options: {
+						indexAxis: 'y', // Barras horizontais
+						scales: {
+							x: { beginAtZero: true }
+						}
+					}
+				});
+			}
+		}
+
+		// Dispara quando a página estiver totalmente carregada
+		if (document.readyState === 'complete') {
+			initCharts();
+		} else {
+			window.addEventListener('load', initCharts);
+		}
+
+		// Fallback para 2 segundos
+		setTimeout(initCharts, 2000);
+	</script>
+
+	<style>
+	#chart, #myChart, #earning {
+		min-width: 100% !important;
+		min-height: 300px !important;
+		background: #f8f9fa !important;
+		border: 1px dashed #4e73df !important;
+	}
+	</style>
+
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/my_chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="/js/my_chart.js"></script>
+
+		<!-- Carregue APENAS UMA VERSÃO de cada biblioteca -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+
+	<!-- Seu script.js deve vir DEPOIS -->
 	<script src="../js/script.js"></script>
 </body>
 </html>

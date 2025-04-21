@@ -1,5 +1,13 @@
 <?php
 	include_once '../Config/conection.php';
+
+	session_start();
+
+	// Modifique a verificação para não interromper o carregamento dos dados
+	if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+		header("Location: ../Views/index.php");
+		exit();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +59,7 @@
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
 					<li><a href="../Views/perfil-admin.php"> Perfil </a></li>
-					<li><a href="../Models/logout.php"> Sair </a></li>
+					<li><a href="../Models/logout.php"> Terminar Sessão </a></li>
 				</ul>
 			</li>
 		</ul>
@@ -88,14 +96,37 @@
 				<i class='bx bxs-message-square-dots icon' ></i>
 				<span class="badge">8</span>
 			</a>
-			<span class="divider"></span>
 			<div class="profile">
-				<img src="../Views/Dashboard-main/img/IMG-20241121-WA0048.jpg" alt="">
+				<?php
+				$nomeAdmin = htmlspecialchars($_SESSION['nome'] ?? 'Admin');
+				$partesNome = array_filter(explode(' ', $nomeAdmin)); // Remove valores vazios
+				
+				$iniciais = '';
+				if (!empty($partesNome)) {
+					$iniciais .= strtoupper(substr($partesNome[0], 0, 1));
+					if (count($partesNome) > 1) {
+						$iniciais .= strtoupper(substr(end($partesNome), 0, 1));
+					}
+				}
+				?>
+				
+				<div class="profile-initials" style="
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					background: #4e73df;
+					color: white;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: bold;
+					font-size: 16px;
+				"><?= $iniciais ?: 'AD' ?></div>
 				
 				<ul class="profile-link">
-					<li><a href="#"><i class='bx bxs-user-circle icon' ></i> Profil</a></li>
-					<li><a href="#"><i class='bx bxs-cog' ></i> Settings</a></li>
-					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle' ></i> sair</a></li>
+					<li><a href="#"><i class='bx bxs-user-circle icon'></i> Perfil</a></li>
+					<li><a href="#"><i class='bx bxs-cog'></i> Configurações</a></li>
+					<li><a href="../Models/logout.php"><i class='bx bxs-log-out-circle'></i> Sair</a></li>
 				</ul>
 			</div>
 		</nav>

@@ -1,7 +1,13 @@
 <?php
-    session_start();
-    session_unset();
-    session_destroy();
-    header("Location: ../Views/index.php");
-    exit();
+session_start();
+
+// Limpa TODOS os dados da sessão
+$_SESSION = array();
+
+// Destrói a sessão completamente
+session_destroy();
+
+// Redireciona para a página de login
+header("Location: ../Views/index.php");
+exit();
 ?>
