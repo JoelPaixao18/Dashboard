@@ -660,17 +660,7 @@ async function visResidencia(id) {
                 const carouselItem = document.createElement('div');
                 carouselItem.className = `carousel-item h-100 ${index === 0 ? 'active' : ''}`;
                 
-                // Função para verificar se uma imagem existe
-                const checkImage = (path) => {
-                    return new Promise((resolve) => {
-                        const testImg = new Image();
-                        testImg.onload = () => resolve(true);
-                        testImg.onerror = () => resolve(false);
-                        testImg.src = path;
-                    });
-                };
-
-                // Criar imagem
+                // Criar imagem primeiro
                 const img = document.createElement('img');
                 img.className = 'd-block mx-auto h-100 w-auto';
                 img.alt = `Imagem ${index + 1} do imóvel`;
@@ -681,26 +671,16 @@ async function visResidencia(id) {
                 if (image.startsWith('http')) {
                     imagePath = image;
                 } else {
-                    // Remove qualquer barra inicial e limpa o caminho
-                    const fileName = image.replace(/^[\/\\]+/, '').replace(/^(Backend\/uploads\/|uploads\/)/g, '');
-                    
-                    // Configurar manipuladores de eventos antes de definir src
-                    img.onerror = async function() {
-                        // Se falhar carregando do Backend, tenta o diretório uploads
-                        const defaultPath = `/RESINGOLA-main/uploads/${fileName}`;
-                        const exists = await checkImage(defaultPath);
-                        if (exists) {
-                            this.src = defaultPath;
-                        } else {
-                            this.src = '/RESINGOLA-main/uploads/no-image.svg';
-                        }
-                    };
-
-                    // Primeiro tenta carregar do Backend
-                    imagePath = `/RESINGOLA-main/Backend/uploads/${fileName}`;
+                    // Usar o caminho completo da imagem
+                    imagePath = `/RESINGOLA-main/${image}`;
                 }
 
-                // Definir o src da imagem após configurar os handlers
+                // Configurar manipulador de erro
+                img.onerror = function() {
+                    this.src = '/RESINGOLA-main/uploads/no-image.svg';
+                };
+
+                // Definir o src da imagem depois de configurar o handler de erro
                 img.src = imagePath;
                 
                 carouselItem.appendChild(img);

@@ -29,34 +29,46 @@ try {
             $decodedImages = json_decode($residencia['images'], true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decodedImages)) {
                 $images = array_map(function($img) {
-                    // Remove qualquer barra inicial e limpa o caminho
-                    $fileName = ltrim($img, '/');
-                    $fileName = preg_replace('/^(Backend\/uploads\/|uploads\/)/', '', $fileName);
+                    // Remove qualquer barra inicial
+                    $img = ltrim($img, '/');
                     
-                    // Verifica primeiro no diretório Backend/uploads/
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/Backend/uploads/' . $fileName)) {
-                        return $fileName;
+                    // Verifica se a imagem existe em Backend/uploads/
+                    $backendPath = 'Backend/uploads/' . $img;
+                    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/' . $backendPath)) {
+                        return $backendPath;
                     }
                     
-                    // Se não existir, verifica no diretório uploads/
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/uploads/' . $fileName)) {
-                        return $fileName;
+                    // Se não encontrou, verifica com o prefixo 'uploads'
+                    $backendPathWithPrefix = 'Backend/uploads/uploads' . $img;
+                    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/' . $backendPathWithPrefix)) {
+                        return $backendPathWithPrefix;
                     }
                     
-                    // Se não encontrar em nenhum lugar, retorna apenas o nome do arquivo
-                    return $fileName;
+                    // Se não encontrou em nenhum lugar, retorna o caminho original
+                    return $backendPath;
                 }, $decodedImages);
             } else {
                 // Se não for um JSON válido, trata como uma única imagem
-                $fileName = ltrim($residencia['images'], '/');
-                $fileName = preg_replace('/^(Backend\/uploads\/|uploads\/)/', '', $fileName);
-                $images = [$fileName];
+                $img = ltrim($residencia['images'], '/');
+                $backendPath = 'Backend/uploads/' . $img;
+                $backendPathWithPrefix = 'Backend/uploads/uploads' . $img;
+                
+                if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/' . $backendPathWithPrefix)) {
+                    $images = [$backendPathWithPrefix];
+                } else {
+                    $images = [$backendPath];
+                }
             }
         } else if (is_array($residencia['images'])) {
             $images = array_map(function($img) {
-                // Remove qualquer barra inicial e limpa o caminho
-                $fileName = ltrim($img, '/');
-                return preg_replace('/^(Backend\/uploads\/|uploads\/)/', '', $fileName);
+                $img = ltrim($img, '/');
+                $backendPath = 'Backend/uploads/' . $img;
+                $backendPathWithPrefix = 'Backend/uploads/uploads' . $img;
+                
+                if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/RESINGOLA-main/' . $backendPathWithPrefix)) {
+                    return $backendPathWithPrefix;
+                }
+                return $backendPath;
             }, $residencia['images']);
         }
     }
