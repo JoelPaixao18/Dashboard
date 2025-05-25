@@ -9,7 +9,12 @@ use Dompdf\Options;
 $options = new Options();
 $options->set('defaultFont', 'Arial');
 $options->set('isRemoteEnabled', true); // Permite carregar imagens externas
+$options->set('chroot', dirname(__DIR__)); // Define o diretório raiz para carregamento de arquivos
 $dompdf = new Dompdf($options);
+
+// Caminho absoluto para a logo
+$logoPath = dirname(__DIR__) . '/Views/Dashboard-main/img/logo_resi.png';
+$logoPath = 'file:///' . str_replace('\\', '/', $logoPath);
 
 // Consulta ao banco de dados
 $query_residencias = "SELECT id, 
@@ -22,6 +27,7 @@ $query_residencias = "SELECT id,
                             bathroomCount,
                             kitchenCount,
                             quintal,
+                            varanda,
                             andares,
                             garagem,
                             hasWater,
@@ -117,7 +123,7 @@ $html = '
 </head>
 <body>
     <div class="header">
-        <img class="logo" src="../Views/Dashboard-main/img/logo_resi.png" alt="Logo">
+        <img class="logo" src="' . $logoPath . '" alt="Logo">
         <div>
             <h1 class="title">Relatório de Imóveis</h1>
             <div class="subtitle">Inventário Completo de Propriedades</div>
@@ -141,6 +147,7 @@ $html = '
                 <th >Cozinhas</th>
                 <th >Banheiros</th>
                 <th >Quintal</th>
+                <th >Varanda</th>
                 <th >Andares</th>
                 <th >Garagem</th>
                 <th>Água</th>
@@ -167,7 +174,8 @@ while ($row_residencia = $result_residencias->fetch(PDO::FETCH_ASSOC)) {
                 <td>' . ($row_residencia['livingRoomCount'] ?? 'N/A') . '</td>
                 <td>' . ($row_residencia['kitchenCount'] ?? 'N/A') . '</td>
                 <td>' . ($row_residencia['bathroomCount'] ?? 'N/A') . '</td>
-                                <td>' . ($row_residencia['quintal'] ?? 'N/A') . '</td>
+                <td>' . ($row_residencia['quintal'] ?? 'N/A') . '</td>
+                <td>' . ($row_residencia['varanda'] ?? 'N/A') . '</td>
                 <td>' . ($row_residencia['andares'] ?? 'N/A') . '</td>
                 <td>' . ($row_residencia['garagem'] ?? 'N/A') . '</td>
                 <td>' . ($row_residencia['hasWater'] ?? 'N/A') . '</td>

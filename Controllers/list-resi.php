@@ -10,14 +10,12 @@ try {
         $pagina = 1;
     }
 
-    $qnt_result_pg = 20;
+    $qnt_result_pg = 5;
     $inicio = ($pagina - 1) * $qnt_result_pg;
 
-    // Consulta principal
+    // Consulta principal com todos os campos
     $query_residencias = "SELECT 
-                            id, typeResi, typology, location, price, status, 
-                            houseSize, livingRoomCount, bathroomCount, kitchenCount, 
-                            quintal, andares, garagem, hasWater, hasElectricity 
+                            id, typeResi, typology, location, price, status
                           FROM residencia";
     
     $params = [];
@@ -26,7 +24,13 @@ try {
         $query_residencias .= " WHERE typeResi LIKE :search 
                                OR typology LIKE :search 
                                OR location LIKE :search 
-                               OR status LIKE :search";
+                               OR status LIKE :search
+                               OR houseSize LIKE :search
+                               OR livingRoomCount LIKE :search
+                               OR bathroomCount LIKE :search
+                               OR kitchenCount LIKE :search
+                               OR latitude LIKE :search
+                               OR longitude LIKE :search";
         $params[':search'] = '%' . $searchTerm . '%';
     }
     
@@ -46,100 +50,163 @@ try {
         throw new PDOException("Erro ao executar consulta de residências");
     }
 
-    // Construir a tabela HTML com classes adicionais para melhorar o layout
-    $dados = '<div class="table-responsive" style="overflow-x: auto;">
-    <table class="table table-striped table-bordered" style="width: 100%; min-width: 1200px;">
-        <thead class="thead-dark">
-            <tr>
-                <th style="min-width: 50px;">ID</th>
-                <th style="min-width: 100px;">Tipo</th>
-                <th style="min-width: 90px;">Área (m²)</th>
-                <th style="min-width: 200px;">Localização</th>
-                <th style="min-width: 120px;">Valor (kz)</th>
-                <th style="min-width: 100px;">Tipologia</th>
-                <th style="min-width: 80px;">Salas</th>
-                <th style="min-width: 100px;">Cozinhas</th>
-                <th style="min-width: 100px;">Banheiros</th>
-                <th style="min-width: 100px;">Quintal</th>
-                <th style="min-width: 100px;">Andares</th>
-                <th style="min-width: 100px;">Garagem</th>
-                <th style="min-width: 80px;">Água</th>
-                <th style="min-width: 100px;">Energia</th>
-                <th style="min-width: 100px;">Status</th>
-                <th style="min-width: 150px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody>';
+    // Construir a tabela HTML com espaçamento adequado
+    $dados = '<div class="table-container mt-4">
+                <style>
+                    .custom-table {
+                        border-collapse: separate;
+                        border-spacing: 0 12px;
+                    }
+                    .custom-table thead th {
+                        background-color: #f8f9fa;
+                        padding: 12px 15px;
+                        border-bottom: 2px solid #dee2e6;
+                    }
+                    .custom-table tbody tr {
+                        background-color: #fff;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                        transition: all 0.3s ease;
+                    }
+                    .custom-table tbody tr:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    }
+                    .custom-table td {
+                        padding: 15px;
+                        vertical-align: middle;
+                        border-top: none;
+                        border-bottom: 1px solid #f1f1f1;
+                    }
+                    .data-cell {
+                        min-width: 80px;
+                        padding-left: 15px;
+                        padding-right: 15px;
+                    }
+                    .badge-cell {
+                        min-width: 100px;
+                    }
+                    .action-cell {
+                        min-width: 150px;
+                    }
+                </style>
+                <div class="table-responsive">
+                    <table class="table custom-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="ps-3">ID</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Tipologia</th>
+                                <th scope="col">Localização</th>
+                                <th scope="col">Valor</th>
+                                <th scope="col" class="badge-cell">Status</th>
+                                <th scope="col" class="action-cell text-center pe-3">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
 
     while ($row_residencia = $result_residencias->fetch(PDO::FETCH_ASSOC)) {
-        // Sanitizar todos os dados antes de exibir
+        // Sanitizar todos os dados
         $id = htmlspecialchars($row_residencia['id'], ENT_QUOTES, 'UTF-8');
         $typeResi = htmlspecialchars($row_residencia['typeResi'], ENT_QUOTES, 'UTF-8');
         $typology = htmlspecialchars($row_residencia['typology'], ENT_QUOTES, 'UTF-8');
         $location = htmlspecialchars($row_residencia['location'], ENT_QUOTES, 'UTF-8');
+        /*$houseSize = htmlspecialchars($row_residencia['houseSize'], ENT_QUOTES, 'UTF-8');
+        $livingRoomCount = htmlspecialchars($row_residencia['livingRoomCount'], ENT_QUOTES, 'UTF-8');
+        $bathroomCount = htmlspecialchars($row_residencia['bathroomCount'], ENT_QUOTES, 'UTF-8');
+        $kitchenCount = htmlspecialchars($row_residencia['kitchenCount'], ENT_QUOTES, 'UTF-8');
+        $latitude = htmlspecialchars($row_residencia['latitude'], ENT_QUOTES, 'UTF-8');
+        $longitude = htmlspecialchars($row_residencia['longitude'], ENT_QUOTES, 'UTF-8');*/
         
         // Formatar preço
         $price = 'N/A';
         if (is_numeric($row_residencia['price'])) {
-            $price = 'kz ' . number_format($row_residencia['price'], 2, ',', '.');
+            $price = 'Kz ' . number_format($row_residencia['price'], 2, ',', '.');
         }
         
+        // Formatar status
         $status = htmlspecialchars($row_residencia['status'], ENT_QUOTES, 'UTF-8');
-        
-        // Formatar área
-        $houseSize = 'N/A';
-        if (is_numeric($row_residencia['houseSize'])) {
-            $houseSize = number_format($row_residencia['houseSize'], 1, ',', '.') . ' m²';
+        $statusBadge = '';
+        if ($status === 'Venda') {
+            $statusBadge = '<span class="badge bg-warning text-dark px-3 py-1">' . $status . '</span>';
+        } elseif ($status === 'Arrendamento') {
+            $statusBadge = '<span class="badge bg-success px-3 py-1">' . $status . '</span>';
+        } else {
+            $statusBadge = '<span class="badge bg-secondary px-3 py-1">' . $status . '</span>';
         }
         
-        // Sanitizar os demais campos
-        $livingRoomCount = htmlspecialchars($row_residencia['livingRoomCount'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $bathroomCount = htmlspecialchars($row_residencia['bathroomCount'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $kitchenCount = htmlspecialchars($row_residencia['kitchenCount'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $quintal = htmlspecialchars($row_residencia['quintal'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $andares = htmlspecialchars($row_residencia['andares'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $garagem = htmlspecialchars($row_residencia['garagem'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $hasWater = htmlspecialchars($row_residencia['hasWater'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
-        $hasElectricity = htmlspecialchars($row_residencia['hasElectricity'] ?? 'N/A', ENT_QUOTES, 'UTF-8');
+        // Formatar campos booleanos
+        $formatBoolean = function($value) {
+            return $value ? '<i class="fas fa-check-circle text-success fs-5"></i>' : '<i class="fas fa-times-circle text-danger fs-5"></i>';
+        };
+        
+        /*$quintal = $formatBoolean($row_residencia['quintal']);
+        $varanda = $formatBoolean($row_residencia['varanda']);
+        $garagem = $formatBoolean($row_residencia['garagem']);
+        $hasWater = $formatBoolean($row_residencia['hasWater']);
+        $hasElectricity = $formatBoolean($row_residencia['hasElectricity']);
+        
+        // Formatar andares
+        $andares = $row_residencia['andares'] > 0 ? $row_residencia['andares'] : '0';*/
 
-        // Linha da tabela com padding aumentado
-        $dados .= "<tr>
-                    <td style='padding: 12px 8px;'>{$id}</td>
-                    <td style='padding: 12px 8px;'>{$typeResi}</td>
-                    <td style='padding: 12px 8px;'>{$houseSize}</td>
-                    <td style='padding: 12px 8px;'>{$location}</td>
-                    <td style='padding: 12px 8px;'>{$price}</td>
-                    <td style='padding: 12px 8px;'>{$typology}</td>
-                    <td style='padding: 12px 8px;'>{$livingRoomCount}</td>
-                    <td style='padding: 12px 8px;'>{$kitchenCount}</td>
-                    <td style='padding: 12px 8px;'>{$bathroomCount}</td>
-                    <td style='padding: 12px 8px;'>{$quintal}</td>
-                    <td style='padding: 12px 8px;'>{$andares}</td>
-                    <td style='padding: 12px 8px;'>{$garagem}</td>
-                    <td style='padding: 12px 8px;'>{$hasWater}</td>
-                    <td style='padding: 12px 8px;'>{$hasElectricity}</td>
-                    <td style='padding: 12px 8px;'>{$status}</td>
-                    <td style='padding: 12px 8px;'>
-                        <div class='btn-group' role='group'>
-                            <button id='{$id}' class='btn btn-primary btn-sm mr-1' onclick='visResidencia({$id})' title='Visualizar'>
-                                <i class='fas fa-eye'></i>
+        // Linha da tabela com espaçamento adequado
+        $dados .= '<tr>
+                    <td class="fw-bold ps-3">'.$id.'</td>
+                    <td class="data-cell">'.$typeResi.'</td>
+                    <td class="data-cell">'.$typology.'</td>
+                    <td class="data-cell">'.$location.'</td>
+                    <td class="data-cell fw-semibold">'.$price.'</td>
+                    <td class="badge-cell">'.$statusBadge.'</td>
+                    <td class="action-cell text-center pe-3">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
+                             <button id="'.$id.'" class="btn btn-outline-primary btn-sm mr-1" onclick="visResidencia('.$id.')" title="Visualizar" data-bs-toggle="tooltip">
+                                <i class="fas fa-eye"></i>
                             </button>
-                            <button id='{$id}' class='btn btn-warning btn-sm mr-1' onclick='editResidenciaDados({$id})' title='Editar'>
-                                <i class='fas fa-edit'></i>
+                            <button id="'.$id.'" class="btn btn-outline-warning px-3" onclick="editResidenciaDados('.$id.')" title="Editar" data-bs-toggle="tooltip">
+                                <i class="fas fa-edit"></i>
                             </button>
-                            <button id='{$id}' class='btn btn-danger btn-sm' onclick='apagarResidenciaDados({$id})' title='Excluir'>
-                                <i class='fas fa-trash'></i>
+                            <button id="'.$id.'" class="btn btn-outline-danger px-3" onclick="apagarResidenciaDados('.$id.')" title="Excluir" data-bs-toggle="tooltip">
+                                <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
                     </td>
-                </tr>";
+                </tr>';
     }
 
-    $dados .= "</tbody></table></div>";
+    // Se não houver resultados
+    if ($result_residencias->rowCount() === 0) {
+        $dados .= '<tr>
+                    <td colspan="19" class="text-center py-5">
+                        <div class="empty-table-message">
+                            <i class="fas fa-home fa-3x mb-3 text-muted opacity-50"></i>
+                            <h4 class="text-muted mb-2">Nenhum imóvel encontrado</h4>
+                            <p class="text-muted">Cadastre um novo imóvel para começar</p>
+                        </div>
+                    </td>
+                </tr>';
+    }
+
+    $dados .= '</tbody></table></div></div>';
 
     // Paginação - contar o total de registros
     $query_pg = "SELECT COUNT(id) AS num_result FROM residencia";
+    if (!empty($searchTerm)) {
+        $query_pg .= " WHERE typeResi LIKE :search 
+                       OR typology LIKE :search 
+                       OR location LIKE :search 
+                       OR status LIKE :search
+                       OR houseSize LIKE :search
+                       OR livingRoomCount LIKE :search
+                       OR bathroomCount LIKE :search
+                       OR kitchenCount LIKE :search
+                       OR latitude LIKE :search
+                       OR longitude LIKE :search";
+    }
+    
     $result_pg = $conn->prepare($query_pg);
+    
+    if (!empty($searchTerm)) {
+        $result_pg->bindValue(':search', '%' . $searchTerm . '%');
+    }
     
     if (!$result_pg->execute()) {
         throw new PDOException("Erro ao contar registros");
@@ -150,45 +217,70 @@ try {
     $max_links = 2;
 
     // Construir a paginação
-    $dados .= '<nav aria-label="Page navigation example"><ul class="pagination justify-content-end">';
+    if ($qnt_pg > 1) {
+        $dados .= '<div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+                    <div class="text-muted small">
+                        Mostrando <span class="fw-semibold">' . (($pagina - 1) * $qnt_result_pg + 1) . '</span> a <span class="fw-semibold">' . 
+                        min($pagina * $qnt_result_pg, $row_pg['num_result']) . '</span> de <span class="fw-semibold">' . 
+                        $row_pg['num_result'] . '</span> registros
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item'.($pagina <= 1 ? ' disabled' : '').'">
+                                <a class="page-link px-3 py-2" href="#" onclick="listarResidencias(1)" aria-label="Primeira">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item'.($pagina <= 1 ? ' disabled' : '').'">
+                                <a class="page-link px-3 py-2" href="#" onclick="listarResidencias('.($pagina - 1).')" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>';
 
-    // Link para primeira página
-    $dados .= "<li class='page-item" . ($pagina <= 1 ? ' disabled' : '') . "'>
-                <a href='#' class='page-link' onclick='listarResidencias(1)'>Primeira</a>
-               </li>";
+        // Links numéricos
+        $start = max(1, $pagina - $max_links);
+        $end = min($qnt_pg, $pagina + $max_links);
 
-    // Links anteriores
-    for ($pag_ant = $pagina - $max_links; $pag_ant <= $pagina - 1; $pag_ant++) {
-        if ($pag_ant >= 1) {
-            $dados .= "<li class='page-item'>
-                        <a class='page-link' href='#' onclick='listarResidencias($pag_ant)'>{$pag_ant}</a>
-                       </li>";
+        if ($start > 1) {
+            $dados .= '<li class="page-item disabled"><a class="page-link px-3 py-2">...</a></li>';
         }
-    }
 
-    // Página atual
-    $dados .= "<li class='page-item active'>
-                <a class='page-link' href='#'>{$pagina}</a>
-               </li>";
-
-    // Links posteriores
-    for ($pag_dep = $pagina + 1; $pag_dep <= $pagina + $max_links; $pag_dep++) {
-        if ($pag_dep <= $qnt_pg) {
-            $dados .= "<li class='page-item'>
-                        <a class='page-link' href='#' onclick='listarResidencias($pag_dep)'>{$pag_dep}</a>
-                       </li>";
+        for ($i = $start; $i <= $end; $i++) {
+            $active = $i == $pagina ? ' active' : '';
+            $dados .= '<li class="page-item'.$active.'">
+                        <a class="page-link px-3 py-2" href="#" onclick="listarResidencias('.$i.')">'.$i.'</a>
+                       </li>';
         }
-    }
 
-    // Link para última página
-    $dados .= "<li class='page-item" . ($pagina >= $qnt_pg ? ' disabled' : '') . "'>
-                <a class='page-link' href='#' onclick='listarResidencias($qnt_pg)'>Última</a>
-               </li>";
-    $dados .= '</ul></nav>';
+        if ($end < $qnt_pg) {
+            $dados .= '<li class="page-item disabled"><a class="page-link px-3 py-2">...</a></li>';
+        }
+
+        $dados .= '<li class="page-item'.($pagina >= $qnt_pg ? ' disabled' : '').'">
+                    <a class="page-link px-3 py-2" href="#" onclick="listarResidencias('.($pagina + 1).')" aria-label="Próxima">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                   </li>
+                   <li class="page-item'.($pagina >= $qnt_pg ? ' disabled' : '').'">
+                    <a class="page-link px-3 py-2" href="#" onclick="listarResidencias('.$qnt_pg.')" aria-label="Última">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                   </li>
+                   </ul></nav></div>';
+    }
 
     echo $dados;
 
 } catch (PDOException $e) {
-    echo "<div class='alert alert-danger'>Erro no banco de dados: " . htmlspecialchars($e->getMessage()) . "</div>";
+    echo '<div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle me-3 fs-4"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">Erro no banco de dados</h5>
+                    <p class="mb-0">' . htmlspecialchars($e->getMessage()) . '</p>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
 }
 ?>

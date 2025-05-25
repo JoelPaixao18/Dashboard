@@ -102,24 +102,39 @@ cadForm.addEventListener('submit', async (e) => {
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário preencher o campo E-mail!</div>";
     } else if(document.getElementById("senha").value === ""){
         msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Necessário preencher o campo Senha!</div>";
+    } else if(!validarTelefone(document.getElementById("tel").value)){
+        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Telefone inválido!</div>";
+    } else if(!validarBI(document.getElementById("bi").value)) {
+        msgAlertaErroCad.innerHTML = "<div class='alert alert-danger' role='alert'>Erro: Número de BI inválido!</div>";
     } else {
 
         const dadosForm = new FormData(cadForm);
         dadosForm.append('add', 1);
         
-            const dados = await fetch('../Controllers/cadastrar.php', {
-                method: 'POST',
-                body: dadosForm,
-            });
-
-            const resposta = await dados.json();
-            if(resposta['erro']){
-                msgAlertaErroCad.innerHTML = resposta['msg'];
-            }else{
-                msgAlerta.innerHTML = resposta['msg'];
-                cadForm.reset();
-                cadModal.hide();
-                listarUsuarios(1);
+            try {
+                const dados = await fetch('../Controllers/cadastrar.php', {
+                    method: 'POST',
+                    body: dadosForm,
+                });
+                
+                if (!dados.ok) {
+                    throw new Error(`HTTP error! status: ${dados.status}`);
+                }
+                
+                const resposta = await dados.json();
+                console.log(resposta); // Verifique no console do navegador
+                
+                if(resposta['erro']){
+                    msgAlertaErroCad.innerHTML = resposta['msg'];
+                }else{
+                    msgAlerta.innerHTML = resposta['msg'];
+                    cadForm.reset();
+                    cadModal.hide();
+                    listarUsuarios(1);
+                }
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+                msgAlertaErroCad.innerHTML = `<div class='alert alert-danger'>Erro na requisição: ${error.message}</div>`;
             }
     }
 
@@ -128,10 +143,10 @@ cadForm.addEventListener('submit', async (e) => {
 
 // ------------------ CRUD - Visualizar (Usuário) ------------------
 
-async function visUsuario(id) {
+// Função de visualização
+/*async function visUsuario(id) {
     const dados = await fetch('../Models/visualizar.php?id=' + id);
     const resposta = await dados.json();
-    //console.log(resposta);
 
     if(resposta['erro']) {
         msgAlerta.innerHTML = resposta['erro'];
@@ -142,18 +157,20 @@ async function visUsuario(id) {
         document.getElementById("idUsuario").innerHTML = resposta['dados'].id;
         document.getElementById("nomeUsuario").innerHTML = resposta['dados'].nome;
         document.getElementById("emailUsuario").innerHTML = resposta['dados'].email;
+        document.getElementById("telUsuario").innerHTML = resposta['dados'].tel || 'Não informado';
+        document.getElementById("biUsuario").innerHTML = resposta['dados'].BI || 'Não informado';
         document.getElementById("roleUsuario").innerHTML = resposta['dados'].role;
     }
-}
+}*/
 
 // ------------------ CRUD - Editar (Usuário) ------------------
 
+// Função de edição
 async function editUsuarioDados(id) {
     msgAlertaErroEdit.innerHTML = "";
 
     const dados = await fetch('../Models/visualizar.php?id=' + id);
     const resposta = await dados.json();
-    //console.log(resposta);
 
     if (resposta['erro']) {
         msgAlerta.innerHTML = resposta['msg'];
@@ -163,6 +180,8 @@ async function editUsuarioDados(id) {
         document.getElementById("editid").value = resposta['dados'].id;
         document.getElementById("editnome").value = resposta['dados'].nome;
         document.getElementById("editemail").value = resposta['dados'].email;
+        document.getElementById("edittel").value = resposta['dados'].tel || '';
+        document.getElementById("editbi").value = resposta['dados'].BI || '';
     }
 }
 

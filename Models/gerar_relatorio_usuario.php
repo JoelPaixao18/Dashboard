@@ -12,7 +12,7 @@ $options->set('isRemoteEnabled', true); // Permite carregar imagens externas
 $dompdf = new Dompdf($options);
 
 // Consulta ao banco de dados
-$query_usuarios = "SELECT id, nome, email, role FROM usuario ORDER BY id ASC";
+$query_usuarios = "SELECT id, nome, email, tel, BI, role FROM usuario ORDER BY id ASC";
 $result_usuarios = $conn->prepare($query_usuarios);
 $result_usuarios->execute();
 
@@ -96,6 +96,8 @@ $html = '
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
+                <th>Contato</th>
+                <th>Nº de BI</th>
                 <th>Perfil</th>
             </tr>
         </thead>
@@ -106,6 +108,8 @@ while ($row_usuario = $result_usuarios->fetch(PDO::FETCH_ASSOC)) {
                  <td>' . $row_usuario['id'] . '</td>
                  <td>' . $row_usuario['nome'] . '</td>
                  <td>' . $row_usuario['email'] . '</td>
+                 <td>' . $row_usuario['tel'] . '</td>
+                 <td>' . $row_usuario['BI'] . '</td>
                  <td>' . $row_usuario['role'] . '</td>
               </tr>';
 }
@@ -122,7 +126,7 @@ $html .= '
 
 // Gerar o PDF
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
+$dompdf->setPaper('A3', 'portrait');
 $dompdf->render();
 
 // Exibir o PDF no navegador

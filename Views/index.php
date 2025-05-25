@@ -33,128 +33,127 @@ function isActiveForm($formName, $activeForm) {
 </head>
 <body>
 <div class="container">
-        <!-- First Content -->
-        <div class="content first-content">
-            <div class="first-column">
-                <img class="img" src="../Views/imgs/logo_resi.png" alt="Logo">
-                <h2 class="title title-primary"> Bem-Vindo ao RESINGOLA </h2>
-                <p class="description description-primary">Para continuar a gerenciar a App</p>
-                <p class="description description-primary">Por favor entre com as suas infomações pessoais!</p>
+    <!-- Primeiro conteúdo (agora será o login) -->
+    <div class="content first-content">
+        <div class="first-column">
+            <img class="img" src="../Views/imgs/logo_resi.png" alt="Logo">
+            <h2 class="title title-primary"> Bem-Vindo ao RESINGOLA </h2>
+            <p class="description description-primary">Para continuar a gerenciar a App</p>
+            <p class="description description-primary">Por favor entre com as suas infomações pessoais!</p>
 
-                <button id="signin" class="btn btn-primary"> Entrar </button>
-            </div>
-            <div class="second-column <?= isActiveForm('signup', $activeForm) ?>" id="signup-form">
-                <h2 class="title title-second"> Criar Conta </h2>
-                <div class="social-media">
-                    <ul class="list-social-media">
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-facebook" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-google" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-linkedin" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                    </ul>
-                </div>
-                <p class="description description-second">ou use o seu e-mail para o cadastro:</p>
-                    <form action="../Controllers/login_signup.php" method="post" class="form">
-
-                        <?= showError($errors['signup']); ?>
-
-                        <label for="nome" class="label-input">
-                            <i class="bi bi-person icon-modify"></i>
-                            <input type="text" name="nome" placeholder="Nome Completo" required>
-                        </label>
-
-                        <label for="email" class="label-input">
-                            <i class="bi bi-envelope-at-fill icon-modify"></i>
-                            <input type="email" name="email" placeholder="Exemple: email123@gmail.com" required>
-                        </label>
-
-                        <label for="senha" class="label-input">
-                            <i class="bi bi-lock icon-modify"></i>
-                            <input type="password" name="senha" placeholder="* * * * * * *" required>
-                        </label>
-
-                        <label for="" class="label-input">
-                            <select name="role" id="role" class="label-input">
-                                <option value="">----- Select Role -----</option>
-                                <option value="admin">Admin</option>
-                                <!--<option value="user">User</option>-->
-                            </select>
-                        </label>
-
-                        <button class="btn btn-second" type="submit" name="signup"> Cadastrar </i></button>
-                    </form>
-            </div>
+            <button id="signin" class="btn btn-primary"> Cadastrar </button>
         </div>
-
-        <!-- Second Content -->
-        <div class="content second-content">
-            <div class="first-column">
-                <img class="img" src="../Views/imgs/logo_resi.png" alt="Logo">
-                <h2 class="title title-primary"> Welcome to RESINGOLA </h2>
-                <p class="description description-primary">Digite seus dados pessoais</p>
-                <p class="description description-primary">e começa a gerenciar a App</p>
-
-                <button id="signup1" class="btn btn-primary"> Cadastrar </button>
+        <div class="second-column <?= isActiveForm('login', $activeForm) ?>" id="login-form">
+            <h2 class="title title-second"> Iniciar sessão </h2>
+            <div class="social-media">
+                <ul class="list-social-media">
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-google" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                </ul>
             </div>
-            <div class="second-column">
-                <h2 class="title title-second"> Iniciar sessão </h2>
-                <div class="social-media">
-                    <ul class="list-social-media">
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-facebook" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-google" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                        <a href="#" class="link-social-media">
-                            <li class="item-social-media">
-                                <i class="fa fa-linkedin" aria-hidden="true"></i>
-                            </li>
-                        </a>
-                    </ul>
-                </div>
-                <p class="description description-second">ou use sua conta de e-mail:</p>
-                <!--<div class="<?= isActiveForm('login', $activeForm) ?>" id="login-form">-->
-                    <form action="../Controllers/login_signup.php" method="post" class="form">
+            <p class="description description-second">ou use sua conta de e-mail:</p>
+            <form action="../Controllers/login_signup.php" method="post" class="form">
 
-                        <?= showError($errors['login']); ?>
+                <?= showError($errors['login']); ?>
 
-                        <label for="email" class="label-input">
-                            <i class="bi bi-envelope-at-fill icon-modify"></i>
-                            <input type="email" name="email" placeholder="Exemple: email123@gmail.com" required>
-                        </label>
+                <label for="email" class="label-input">
+                    <i class="bi bi-envelope-at-fill icon-modify"></i>
+                    <input type="email" name="email" placeholder="Exemple: email123@gmail.com" required>
+                </label>
 
-                        <label for="senha" class="label-input">
-                            <i class="bi bi-lock icon-modify"></i>
-                            <input type="password" name="senha" placeholder="* * * * * * *" required>
-                        </label>
+                <label for="senha" class="label-input">
+                    <i class="bi bi-lock icon-modify"></i>
+                    <input type="password" name="senha" placeholder="* * * * * * *" required>
+                </label>
 
-                        <a href="#" class="password">forgot your password?</a>
+                <a href="#" class="password">forgot your password?</a>
 
-                        <button class="btn btn-second" type="submit" name="login"> Entrar </button>
-
-                    </form>
-                <!--</div>-->
-            </div>
+                <button class="btn btn-second" type="submit" name="login"> Entrar </button>
+            </form>
         </div>
-   </div>
+    </div>
 
-   </div>
+    <!-- Segundo conteúdo (agora será o cadastro) -->
+    <div class="content second-content">
+        <div class="first-column">
+            <img class="img" src="../Views/imgs/logo_resi.png" alt="Logo">
+            <h2 class="title title-primary"> Welcome to RESINGOLA </h2>
+            <p class="description description-primary">Digite seus dados pessoais</p>
+            <p class="description description-primary">e começa a gerenciar a App</p>
+
+            <button id="signup1" class="btn btn-primary"> Entrar </button>
+        </div>
+        <div class="second-column <?= isActiveForm('signup', $activeForm) ?>" id="signup-form">
+            <h2 class="title title-second"> Criar Conta </h2>
+            <div class="social-media">
+                <ul class="list-social-media">
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-google" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                    <a href="#" class="link-social-media">
+                        <li class="item-social-media">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <p class="description description-second">ou use o seu e-mail para o cadastro:</p>
+            <form action="../Controllers/login_signup.php" method="post" class="form">
+
+                <?= showError($errors['signup']); ?>
+
+                <label for="nome" class="label-input">
+                    <i class="bi bi-person icon-modify"></i>
+                    <input type="text" name="nome" placeholder="Nome Completo" required>
+                </label>
+
+                <label for="email" class="label-input">
+                    <i class="bi bi-envelope-at-fill icon-modify"></i>
+                    <input type="email" name="email" placeholder="Exemple: email123@gmail.com" required>
+                </label>
+
+                <label for="tel" class="label-input">
+                    <i class="bi bi-telephone icon-modify"></i>
+                    <input type="tel" name="tel" placeholder="Telefone" required>
+                </label>
+
+                <label for="bi" class="label-input">
+                    <i class="bi bi-card-text icon-modify"></i>
+                    <input type="text" name="bi" placeholder="Número do BI" required>
+                </label>
+
+                <label for="senha" class="label-input">
+                    <i class="bi bi-lock icon-modify"></i>
+                    <input type="password" name="senha" placeholder="* * * * * * *" required>
+                </label>
+
+                <input type="hidden" name="role" value="admin">
+
+                <button class="btn btn-second" type="submit" name="signup"> Cadastrar </i></button>
+            </form>
+        </div>
+    </div>
+</div>
    <script src="../js/login_signup.js"></script>
 </body>
 </html>

@@ -1,52 +1,76 @@
-var ctx = document.getElementById('myChart').getContext('2d');
-var earning = document.getElementById('earning').getContext('2d');
-var myChart = new Chart(ctx, {
-
-    type: 'polarArea',
-    data: {
-      labels: [ 'Residência em Rendas', 'Residência Pendentes', 'Residencias Vendidas'],
-      datasets: [{
-        label: '# of Votes',
-        data: [1200, 1900, 3000],
-        borderWidth: [
-            'rgba (0, 0, 255)',
-            'rgba (255, 240, 32)',
-            'rgba (0, 128, 0)'
-        ],
-        
-      }]
-    },
-    options: {
-        response: true,
+document.addEventListener('DOMContentLoaded', function () {
+    // Gráfico de Pizza (Status das Residências: Venda e Arrendamento)
+    if (document.getElementById('myChart')) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Venda', 'Arrendamento'],
+                datasets: [{
+                    data: [
+                        window.residenciaStatus.venda || 0,
+                        window.residenciaStatus.arrendamento || 0
+                    ],
+                    backgroundColor: [
+                        '#4e73df', // Azul para Venda
+                        '#1cc88a'  // Verde para Arrendamento
+                    ],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribuição de Imóveis: Venda vs Arrendamento',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        // Atualiza os valores da legenda personalizada
+        document.getElementById('venda-count').textContent = window.residenciaStatus.venda || 0;
+        document.getElementById('arrendamento-count').textContent = window.residenciaStatus.arrendamento || 0;
     }
-  });
+    
 
-var myChart = new Chart(earning, {
- type: 'bar',
- data: {
-   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 
-    'September', 'October', 'November', 'December'],
-   datasets: [{
-    label: 'Earning',
-     data: [1230, 1209, 3000, 5324, 2200, 3456, 1999, 2309, 1200, 3000, 5324, 2200],
-         borderWidth: [
-         'rgba (255, 99, 132, 1)',
-         'rgba (54, 162, 235, 1)',
-         'rgba (255, 206, 86, 1)',
-         'rgba (75, 192, 192, 1)',
-         'rgba (153, 102, 255, 1)',
-         'rgba (255, 159, 64, 1)',
-         'rgba (255, 99, 132, 1)',
-         'rgba (54, 162, 235, 1)',
-         'rgba (255, 206, 86, 1)',
-         'rgba (75, 192, 192, 1)',
-         'rgba (153, 102, 255, 1)',
-         'rgba (255, 159, 64, 1)'
-        ],
+    // Gráfico Doughnut (Usuários vs Residências)
+    if (document.getElementById('earning')) {
+        const earning = document.getElementById("earning").getContext("2d");
+        new Chart(earning, {
+            type: "doughnut",
+            data: {
+                labels: ["Usuários", "Residências"],
+                datasets: [{
+                    data: [window.totalUsuarios || 0, window.totalResidencias || 0],
+                    backgroundColor: ["#36b9cc", "#f6c23e"],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Usuários vs Residências',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
         
-      }]
- },
- options: {
-     response: true,
- }
+    }
 });

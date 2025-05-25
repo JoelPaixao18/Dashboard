@@ -1,25 +1,30 @@
 <?php
-	session_start();
-	include_once '../Config/conection.php';
+session_start();
+include_once '../Config/conection.php';
 
-	// Total de usuários
+// Total de usuários
+$stmt = $conn->query("SELECT COUNT(*) AS total FROM usuario");
+$usuarios = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-	$stmt = $conn->query("SELECT COUNT(*) AS total FROM usuario");
-	$usuarios = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+// Residências à venda
+$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'venda'");
+$venda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-	// Residências à venda
-	$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'venda'");
-	$venda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+// Residências à renda
+$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'arrendamento'");
+$renda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-	// Residências à renda
-	$stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'arrendamento'");
-	$renda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+// Calcular porcentagens (adicione estas linhas)
+$totalResidencias = $venda + $renda;
+$percentUsuarios = $usuarios > 0 ? ($usuarios / ($usuarios + $totalResidencias)) * 100 : 0;
+$percentVenda = $totalResidencias > 0 ? ($venda / $totalResidencias) * 100 : 0;
+$percentRenda = $totalResidencias > 0 ? ($renda / $totalResidencias) * 100 : 0;
 
-	// Modifique a verificação para não interromper o carregamento dos dados
-	if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
-		header("Location: ../Views/index.php");
-		exit();
-	}
+// Verificação de login
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+    header("Location: ../Views/index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,13 +55,13 @@
 				</ul>
 			</li>
 			<li><a href="../Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
-			<li><a href="#"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
+			<li><a href="../Views/map/map.php"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
 			<li class="divider" data-text="table">Tabelas</li>
 			<li>
 				<a href="#"><i class='bx bxs-notepad icon' ></i> Listagens <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
 					<li><a href="../Views/listarUsuarios.php">Listar Usuários</a></li>
-					<li><a href="../Views/listarProprietarios.php">Listar Proprietários</a></li>
+					<li><a href="../Views/listarAdmin.php">Listar Administradores</a></li>
 					<li><a href="../Views/listarResidencias.php">Listar Residências</a></li>
 					<li><a href="../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
 				</ul>
@@ -65,7 +70,7 @@
 			<li>
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
-					<li><a href="../Views/perfil-admin.php"> Perfil </a></li>
+					<li><a href="../Views/Perfil-Admin/perfil-admin.php"> Perfil </a></li>
 					<li><a href="../Models/logout.php"> Terminar Sessão </a></li>
 				</ul>
 			</li>
@@ -215,207 +220,6 @@
 	</section>
 	<!-- NAVBAR -->
 
-	<script>
-		// Debug avançado
-		console.log("Dados recebidos:", {
-			usuarios: <?= $usuarios ?>,
-			venda: <?= $venda ?>,
-			renda: <?= $renda ?>
-		});
-		// Gráfico ApexCharts
-		document.addEventListener('DOMContentLoaded', function() {
-			var options = {
-				series: [
-					{
-						name: 'Usuários',
-						data: [<?= $usuarios ?>],
-						color: '#6c5ce7'
-					},
-					{
-						name: 'Vendas',
-						data: [<?= $venda ?>],
-						color: '#00b894'
-					},
-					{
-						name: 'Arrendamentos',
-						data: [<?= $renda ?>],
-						color: '#fd79a8'
-					}
-				],
-				chart: {
-					type: 'line',
-					height: 380,
-					foreColor: '#333',
-					fontFamily: 'Roboto, sans-serif',
-					toolbar: {
-						show: true,
-						tools: {
-							download: true,
-							selection: false,
-							zoom: false,
-							zoomin: false,
-							zoomout: false,
-							pan: false,
-							reset: true
-						}
-					},
-					dropShadow: {
-						enabled: true,
-						top: 3,
-						left: 2,
-						blur: 4,
-						opacity: 0.1
-					}
-				},
-				stroke: {
-					width: 3,
-					curve: 'smooth',
-					lineCap: 'round'
-				},
-				markers: {
-					size: 6,
-					strokeWidth: 0,
-					hover: {
-						size: 8
-					}
-				},
-				grid: {
-					borderColor: '#f1f1f1',
-					padding: {
-						top: 20,
-						right: 20
-					}
-				},
-				xaxis: {
-					categories: ['Controle Geral'],
-					axisBorder: {
-						show: false
-					},
-					axisTicks: {
-						show: false
-					},
-					labels: {
-						style: {
-							fontSize: '14px',
-							fontWeight: 600
-						}
-					}
-				},
-				yaxis: {
-					min: 0,
-					tickAmount: 5,
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-				tooltip: {
-					shared: true,
-					intersect: false,
-					style: {
-						fontSize: '14px'
-					},
-					y: {
-						formatter: function(value) {
-							return value.toLocaleString() + ' registros';
-						}
-					},
-					marker: {
-						show: false
-					}
-				},
-				legend: {
-					position: 'top',
-					horizontalAlign: 'right',
-					fontSize: '14px',
-					itemMargin: {
-						horizontal: 20
-					},
-					markers: {
-						radius: 12
-					}
-				},
-				responsive: [{
-					breakpoint: 600,
-					options: {
-						chart: {
-							height: 300
-						},
-						legend: {
-							position: 'bottom'
-						}
-					}
-				}]
-			};
-
-			var chart = new ApexCharts(document.querySelector("#chart"), options);
-			chart.render();
-		});
-
-		// Reinicialização forçada dos gráficos
-		function initCharts() {
-
-			// 2. Gráficos Chart.js
-			if (typeof Chart !== 'undefined') {
-				// Gráfico 1
-				const ctx1 = document.getElementById('myChart').getContext('2d');
-				if (window.myChart) window.myChart.destroy();
-				window.myChart = new Chart(ctx1, {
-					type: 'bar',
-					data: {
-						labels: ['Venda', 'Arrendamento'],
-						datasets: [{
-							label: 'Imóveis',
-							data: [<?= $venda ?>, <?= $renda ?>],
-							backgroundColor: ['#4e73df', '#1cc88a']
-						}]
-					}
-				});
-
-				// Substitua o gráfico 'earning' por este código:
-				new Chart(document.getElementById('earning').getContext('2d'), {
-					type: 'bar',
-					data: {
-						labels: ['Usuários Registrados'],
-						datasets: [{
-							label: 'Total',
-							data: [<?= $usuarios ?>],
-							backgroundColor: '#4e73df',
-							borderColor: '#2e59d9',
-							borderWidth: 1
-						}]
-					},
-					options: {
-						indexAxis: 'y', // Barras horizontais
-						scales: {
-							x: { beginAtZero: true }
-						}
-					}
-				});
-			}
-		}
-
-		// Dispara quando a página estiver totalmente carregada
-		if (document.readyState === 'complete') {
-			initCharts();
-		} else {
-			window.addEventListener('load', initCharts);
-		}
-
-		// Fallback para 2 segundos
-		setTimeout(initCharts, 2000);
-	</script>
-
-	<style>
-	#chart, #myChart, #earning {
-		min-width: 100% !important;
-		min-height: 300px !important;
-		background: #f8f9fa !important;
-		border: 1px dashed #4e73df !important;
-	}
-	</style>
-
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -428,5 +232,128 @@
 
 	<!-- Seu script.js deve vir DEPOIS -->
 	<script src="../js/script.js"></script>
+
+	<script src="../js/script.js"></script>
+	
+	<script>
+	// Inicialização dos gráficos
+	document.addEventListener('DOMContentLoaded', function() {
+		// Gráfico ApexCharts
+		var options = {
+			series: [
+				{
+					name: 'Usuários',
+					data: [<?= $usuarios ?>],
+					color: '#6c5ce7'
+				},
+				{
+					name: 'Vendas',
+					data: [<?= $venda ?>],
+					color: '#00b894'
+				},
+				{
+					name: 'Arrendamentos',
+					data: [<?= $renda ?>],
+					color: '#fd79a8'
+				}
+			],
+			chart: {
+				type: 'bar',
+				height: 350,
+				toolbar: {
+					show: true
+				}
+			},
+			plotOptions: {
+				bar: {
+					horizontal: false,
+					columnWidth: '55%',
+					endingShape: 'rounded'
+				},
+			},
+			dataLabels: {
+				enabled: false
+			},
+			stroke: {
+				show: true,
+				width: 2,
+				colors: ['transparent']
+			},
+			xaxis: {
+				categories: ['Controle Geral'],
+			},
+			yaxis: {
+				title: {
+					text: 'Quantidade'
+				}
+			},
+			fill: {
+				opacity: 1
+			},
+			tooltip: {
+				y: {
+					formatter: function (val) {
+						return val + " registros"
+					}
+				}
+			}
+		};
+
+		var chart = new ApexCharts(document.querySelector("#chart"), options);
+		chart.render();
+
+		// Gráficos Chart.js
+		const ctx1 = document.getElementById('myChart').getContext('2d');
+		new Chart(ctx1, {
+			type: 'bar',
+			data: {
+				labels: ['Venda', 'Arrendamento'],
+				datasets: [{
+					label: 'Imóveis',
+					data: [<?= $venda ?>, <?= $renda ?>],
+					backgroundColor: ['#4e73df', '#1cc88a']
+				}]
+			},
+			options: {
+				responsive: true,
+				plugins: {
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Distribuição de Imóveis'
+					}
+				}
+			}
+		});
+
+		const ctx2 = document.getElementById('earning').getContext('2d');
+		new Chart(ctx2, {
+			type: 'doughnut',
+			data: {
+				labels: ['Usuários', 'Imóveis à Venda', 'Imóveis para Arrendamento'],
+				datasets: [{
+					data: [<?= $usuarios ?>, <?= $venda ?>, <?= $renda ?>],
+					backgroundColor: ['#36b9cc', '#4e73df', '#1cc88a'],
+					hoverOffset: 10
+				}]
+			},
+			options: {
+				responsive: true,
+				plugins: {
+					legend: {
+						position: 'bottom',
+					},
+					title: {
+						display: true,
+						text: 'Distribuição Geral'
+					}
+				}
+			}
+		});
+	});
+	</script>
+
 </body>
 </html>

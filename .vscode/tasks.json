@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Rodar servidor PHP",
+        "type": "shell",
+        "command": "php",
+        "args": [
+          "-S",
+          "localhost:8000",
+          "-t",
+          "${workspaceFolder}"
+        ],
+        "options": {
+          "shell": {
+            "executable": "cmd.exe",
+            "args": ["/d", "/c"]
+          }
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": [],
+        "detail": "Inicia o servidor embutido do PHP"
+      }
+    ]
+  }
+  

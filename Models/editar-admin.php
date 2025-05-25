@@ -18,8 +18,8 @@ if(empty($dados['id'])) {
 } elseif(empty($dados['bi'])) {
     $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Necessário preencher o campo BI!</div>"];
 } else {
-    // Verificar se o e-mail ou BI já está cadastrado para outro usuário
-    $query_verifica_email = "SELECT id FROM usuario WHERE (email = :email OR BI = :bi) AND id != :id LIMIT 1";
+    // Verificar se o e-mail ou BI já está cadastrado para outro admin
+    $query_verifica_email = "SELECT id FROM administrador WHERE (email = :email OR BI = :bi) AND id != :id LIMIT 1";
     $verifica_email = $conn->prepare($query_verifica_email);
     $verifica_email->bindParam(':email', $dados['email']);
     $verifica_email->bindParam(':bi', $dados['bi']);
@@ -29,8 +29,8 @@ if(empty($dados['id'])) {
     if ($verifica_email->rowCount() > 0) {
         $retornar = ['erro' => true, 'msg' => "<div class='alert alert-danger' role='alert'>Erro: Este e-mail ou BI já está cadastrado para outro usuário!</div>"];
     } else {
-        // Editar usuário
-        $query_usuario = "UPDATE usuario SET nome = :nome, email = :email, tel = :tel, BI = :bi WHERE id = :id";
+        // Editar admin
+        $query_usuario = "UPDATE administrador SET nome = :nome, email = :email, tel = :tel, BI = :bi WHERE id = :id";
         $edit_usuario = $conn->prepare($query_usuario);
         $edit_usuario->bindParam(':nome', $dados['nome']);
         $edit_usuario->bindParam(':email', $dados['email']);
