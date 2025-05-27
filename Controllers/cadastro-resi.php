@@ -92,7 +92,7 @@ try {
         $camposVivenda = ['houseSize', 'livingRoomCount', 'bathroomCount', 'kitchenCount', 'quintal', 'andares', 'garagem', 'hasWater', 'hasElectricity'];
         
         foreach ($camposVivenda as $campo) {
-            if (empty($dados[$campo])) {
+            if (!isset($dados[$campo])) {
                 $errors[] = "Para Vivenda, o campo {$campo} é obrigatório";
             }
         }
@@ -112,12 +112,19 @@ try {
             $errors[] = "Número de andares inválido";
         }
 
-        $opcoesBinarias = ['Sim', 'Não'];
+        // Validação dos campos booleanos
         $camposBinarios = ['quintal', 'garagem', 'hasWater', 'hasElectricity'];
+        $opcoesBinarias = ['Sim', 'Não'];
         
         foreach ($camposBinarios as $campo) {
-            if (!in_array($dados[$campo], $opcoesBinarias)) {
-                $errors[] = "Valor inválido para {$campo}";
+            // Garantir que o valor seja uma string e remover espaços extras
+            $valor = trim((string)$dados[$campo]);
+            
+            // Debug para verificar o valor recebido
+            error_log("Valor recebido para {$campo}: " . var_export($valor, true));
+            
+            if (!in_array($valor, $opcoesBinarias)) {
+                $errors[] = "Valor inválido para {$campo}. Deve ser 'Sim' ou 'Não'. Valor recebido: '{$valor}'";
             }
         }
     }

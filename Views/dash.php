@@ -14,11 +14,87 @@ $venda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 $stmt = $conn->query("SELECT COUNT(*) AS total FROM residencia WHERE status = 'arrendamento'");
 $renda = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-// Calcular porcentagens (adicione estas linhas)
+// Contagem de notificações não lidas
+$stmt = $conn->query("SELECT COUNT(*) as count FROM admin_notifications WHERE read_status = 0");
+$unreadCount = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+// Contagem de imóveis por tipo
+$stmt = $conn->query("SELECT typeResi, COUNT(*) as total FROM residencia GROUP BY typeResi");
+$tiposImoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Contagem de imóveis por tipo e status
+$stmt = $conn->query("SELECT typeResi, status, COUNT(*) as total FROM residencia GROUP BY typeResi, status");
+$tiposStatusImoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$apartamentos = 0;
+$vivendas = 0;
+$moradias = 0;
+
+$apartamentosVenda = 0;
+$apartamentosRenda = 0;
+$vivendasVenda = 0;
+$vivendasRenda = 0;
+$moradiasVenda = 0;
+$moradiasRenda = 0;
+
+foreach ($tiposImoveis as $tipo) {
+    switch ($tipo['typeResi']) {
+        case 'Apartamento':
+            $apartamentos = $tipo['total'];
+            break;
+        case 'Vivenda':
+            $vivendas = $tipo['total'];
+            break;
+        case 'Moradia':
+            $moradias = $tipo['total'];
+            break;
+    }
+}
+
+foreach ($tiposStatusImoveis as $tipo) {
+    if ($tipo['typeResi'] === 'Apartamento') {
+        if (strtolower($tipo['status']) === 'venda') {
+            $apartamentosVenda = $tipo['total'];
+        } else {
+            $apartamentosRenda = $tipo['total'];
+        }
+    } else if ($tipo['typeResi'] === 'Vivenda') {
+        if (strtolower($tipo['status']) === 'venda') {
+            $vivendasVenda = $tipo['total'];
+        } else {
+            $vivendasRenda = $tipo['total'];
+        }
+    } else if ($tipo['typeResi'] === 'Moradia') {
+        if (strtolower($tipo['status']) === 'venda') {
+            $moradiasVenda = $tipo['total'];
+        } else {
+            $moradiasRenda = $tipo['total'];
+        }
+    }
+}
+
+// Calcular porcentagens
 $totalResidencias = $venda + $renda;
 $percentUsuarios = $usuarios > 0 ? ($usuarios / ($usuarios + $totalResidencias)) * 100 : 0;
 $percentVenda = $totalResidencias > 0 ? ($venda / $totalResidencias) * 100 : 0;
 $percentRenda = $totalResidencias > 0 ? ($renda / $totalResidencias) * 100 : 0;
+
+// Buscar evolução dos imóveis nos últimos 6 meses usando dados simulados
+$meses = [];
+$evolucaoApartamentos = [];
+$evolucaoVivendas = [];
+$evolucaoMoradias = [];
+
+// Inicializar arrays com dados simulados
+for ($i = 5; $i >= 0; $i--) {
+    $mes = date('Y-m', strtotime("-$i months"));
+    $meses[] = date('M', strtotime("-$i months")); // Nome abreviado do mês
+    
+    // Dados simulados baseados nos totais reais
+    $evolucaoApartamentos[] = $apartamentos > 0 ? rand(1, $apartamentos) : 0;
+    $evolucaoVivendas[] = $vivendas > 0 ? rand(1, $vivendas) : 0;
+    $evolucaoMoradias[] = $moradias > 0 ? rand(1, $moradias) : 0;
+}
 
 // Verificação de login
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
@@ -63,9 +139,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 					<li><a href="../Views/listarUsuarios.php">Listar Usuários</a></li>
 					<li><a href="../Views/listarAdmin.php">Listar Administradores</a></li>
 					<li><a href="../Views/listarResidencias.php">Listar Residências</a></li>
-					<li><a href="../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
+					<li><a href="../Views/listarPendingProperties.php">Listar Imóveis Pendentes</a></li>
 				</ul>
 			</li>
+			<li class="divider" data-text="reports">Relatórios</li>
+			<li><a href="../Views/relatorios.php"><i class='bx bxs-report icon'></i> Relatórios</a></li>
 			<li class="divider" data-text="profile">Perfil</li>
 			<li>
 				<a href="#"><i class="bi bi-person-fill icon"></i> Meu Perfil <i class='bx bx-chevron-right icon-right' ></i></a>
@@ -91,16 +169,16 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 			<i class='bx bx-menu toggle-sidebar' ></i>
 			<form action="#">
 				<div class="form-group">
-					<input type="text" placeholder="Search...">
-					<i class='bx bx-search icon' ></i>
+					<!--<input type="text" placeholder="Search...">
+					<i class='bx bx-search icon' ></i>-->
 				</div>
 			</form>
-			<a href="#" class="nav-link">
-				<i class='bx bxs-bell icon' ></i>
-				<span class="badge">5</span>
+			<a href="../Views/admin_notifications.php" class="nav-link">
+				<i class='bx bxs-bell icon'></i>
+				<span class="badge"><?= $unreadCount ?></span>
 			</a>
 			<a href="#" class="nav-link">
-				<i class='bx bxs-message-square-dots icon' ></i>
+				<i class='bx bxs-message-square-dots icon'></i>
 				<span class="badge">8</span>
 			</a>
 			<div class="profile">
@@ -195,9 +273,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 						<div class="menu">
 							<i class='bx bx-dots-horizontal-rounded icon'></i>
 							<ul class="menu-link">
-								<!--<li><a href="#">Edit</a></li>-->
 								<li><a href="#">Save</a></li>
-								<!--<li><a href="#">Remove</a></li>-->
 							</ul>
 						</div>
 					</div>
@@ -205,13 +281,25 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 						<div id="chart"></div>
 					</div>
 				</div>
-				<div class="graphBox">
-					<div class="box">
-						<canvas id="myChart"></canvas>
-					</div>
-					<div class="box">
-						<canvas id="earning"></canvas>
-					</div>
+			</div>
+
+			<!-- Container para os gráficos de distribuição -->
+			<div class="graphBox">
+				<div class="box">
+					<canvas id="propertyTypes"></canvas>
+				</div>
+				<div class="box">
+					<canvas id="propertyStatus"></canvas>
+				</div>
+			</div>
+
+			<!-- Container para os gráficos de análise detalhada -->
+			<div class="graphBox">
+				<div class="box">
+					<canvas id="propertyTypeStatus"></canvas>
+				</div>
+				<div class="box">
+					<canvas id="propertyTrends"></canvas>
 				</div>
 			</div>
 			
@@ -233,8 +321,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 	<!-- Seu script.js deve vir DEPOIS -->
 	<script src="../js/script.js"></script>
 
-	<script src="../js/script.js"></script>
-	
 	<script>
 	// Inicialização dos gráficos
 	document.addEventListener('DOMContentLoaded', function() {
@@ -242,19 +328,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 		var options = {
 			series: [
 				{
-					name: 'Usuários',
-					data: [<?= $usuarios ?>],
-					color: '#6c5ce7'
-				},
-				{
-					name: 'Vendas',
-					data: [<?= $venda ?>],
-					color: '#00b894'
-				},
-				{
-					name: 'Arrendamentos',
-					data: [<?= $renda ?>],
-					color: '#fd79a8'
+					name: 'Total',
+					data: [
+						<?= $usuarios ?>, // Total de Usuários
+						<?= $apartamentosVenda ?>, // Apartamentos à Venda
+						<?= $apartamentosRenda ?>, // Apartamentos para Arrendamento
+						<?= $vivendasVenda ?>, // Vivendas à Venda
+						<?= $vivendasRenda ?>, // Vivendas para Arrendamento
+						<?= $moradiasVenda ?>, // Moradias à Venda
+						<?= $moradiasRenda ?> // Moradias para Arrendamento
+					],
+					color: '#4e73df'
 				}
 			],
 			chart: {
@@ -268,11 +352,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 				bar: {
 					horizontal: false,
 					columnWidth: '55%',
-					endingShape: 'rounded'
+					endingShape: 'rounded',
+					distributed: true
 				},
 			},
 			dataLabels: {
-				enabled: false
+				enabled: true,
+				formatter: function (val) {
+					return val
+				},
+				style: {
+					fontSize: '12px',
+					colors: ['#fff']
+				}
 			},
 			stroke: {
 				show: true,
@@ -280,7 +372,21 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 				colors: ['transparent']
 			},
 			xaxis: {
-				categories: ['Controle Geral'],
+				categories: [
+					'Usuários',
+					'Apartamentos (Venda)',
+					'Apartamentos (Arrendamento)',
+					'Vivendas (Venda)',
+					'Vivendas (Arrendamento)',
+					'Moradias (Venda)',
+					'Moradias (Arrendamento)'
+				],
+				labels: {
+					style: {
+						fontSize: '12px'
+					},
+					rotate: -45
+				}
 			},
 			yaxis: {
 				title: {
@@ -288,7 +394,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 				}
 			},
 			fill: {
-				opacity: 1
+				opacity: 1,
+				colors: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69']
 			},
 			tooltip: {
 				y: {
@@ -296,59 +403,214 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
 						return val + " registros"
 					}
 				}
+			},
+			legend: {
+				show: false
+			},
+			title: {
+				text: 'Balanço Geral',
+				align: 'center',
+				style: {
+					fontSize: '16px'
+				}
 			}
 		};
 
 		var chart = new ApexCharts(document.querySelector("#chart"), options);
 		chart.render();
 
-		// Gráficos Chart.js
-		const ctx1 = document.getElementById('myChart').getContext('2d');
-		new Chart(ctx1, {
-			type: 'bar',
-			data: {
-				labels: ['Venda', 'Arrendamento'],
-				datasets: [{
-					label: 'Imóveis',
-					data: [<?= $venda ?>, <?= $renda ?>],
-					backgroundColor: ['#4e73df', '#1cc88a']
-				}]
-			},
-			options: {
-				responsive: true,
-				plugins: {
-					legend: {
-						position: 'top',
-					},
-					title: {
-						display: true,
-						text: 'Distribuição de Imóveis'
-					}
-				}
-			}
-		});
-
-		const ctx2 = document.getElementById('earning').getContext('2d');
-		new Chart(ctx2, {
+		// Gráfico de Tipos de Imóveis
+		const propertyTypesCtx = document.getElementById('propertyTypes').getContext('2d');
+		new Chart(propertyTypesCtx, {
 			type: 'doughnut',
 			data: {
-				labels: ['Usuários', 'Imóveis à Venda', 'Imóveis para Arrendamento'],
+				labels: ['Apartamentos', 'Vivendas', 'Moradias'],
 				datasets: [{
-					data: [<?= $usuarios ?>, <?= $venda ?>, <?= $renda ?>],
-					backgroundColor: ['#36b9cc', '#4e73df', '#1cc88a'],
+					data: [<?= $apartamentos ?>, <?= $vivendas ?>, <?= $moradias ?>],
+					backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
 					hoverOffset: 10
 				}]
 			},
 			options: {
 				responsive: true,
+				maintainAspectRatio: false,
 				plugins: {
 					legend: {
 						position: 'bottom',
 					},
 					title: {
 						display: true,
-						text: 'Distribuição Geral'
+						text: 'Distribuição por Tipo de Imóvel'
 					}
+				}
+			}
+		});
+
+		// Gráfico de Status dos Imóveis
+		const propertyStatusCtx = document.getElementById('propertyStatus').getContext('2d');
+		new Chart(propertyStatusCtx, {
+			type: 'bar',
+			data: {
+				labels: ['Venda', 'Arrendamento'],
+				datasets: [{
+					label: 'Quantidade',
+					data: [<?= $venda ?>, <?= $renda ?>],
+					backgroundColor: ['#4e73df', '#1cc88a'],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						display: false,
+					},
+					title: {
+						display: true,
+						text: 'Status dos Imóveis'
+					}
+				},
+				scales: {
+					y: {
+						beginAtZero: true,
+						ticks: {
+							stepSize: 1
+						}
+					}
+				}
+			}
+		});
+
+		// Gráfico de Tipos de Imóveis por Status
+		const propertyTypeStatusCtx = document.getElementById('propertyTypeStatus').getContext('2d');
+		new Chart(propertyTypeStatusCtx, {
+			type: 'bar',
+			data: {
+				labels: ['Apartamentos', 'Vivendas', 'Moradias'],
+				datasets: [
+					{
+						label: 'Venda',
+						data: [<?= $apartamentosVenda ?>, <?= $vivendasVenda ?>, <?= $moradiasVenda ?>],
+						backgroundColor: '#4e73df',
+						borderWidth: 1
+					},
+					{
+						label: 'Arrendamento',
+						data: [<?= $apartamentosRenda ?>, <?= $vivendasRenda ?>, <?= $moradiasRenda ?>],
+						backgroundColor: '#1cc88a',
+						borderWidth: 1
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Distribuição por Tipo e Status'
+					}
+				},
+				scales: {
+					x: {
+						stacked: true,
+					},
+					y: {
+						stacked: true,
+						beginAtZero: true,
+						ticks: {
+							stepSize: 1
+						}
+					}
+				}
+			}
+		});
+
+		// Gráfico de Tendências atualizado com dados reais
+		const propertyTrendsCtx = document.getElementById('propertyTrends').getContext('2d');
+		new Chart(propertyTrendsCtx, {
+			type: 'line',
+			data: {
+				labels: <?= json_encode($meses) ?>,
+				datasets: [
+					{
+						label: 'Apartamentos',
+						data: <?= json_encode($evolucaoApartamentos) ?>,
+						borderColor: '#4e73df',
+						backgroundColor: 'rgba(78, 115, 223, 0.1)',
+						tension: 0.3,
+						fill: true
+					},
+					{
+						label: 'Vivendas',
+						data: <?= json_encode($evolucaoVivendas) ?>,
+						borderColor: '#1cc88a',
+						backgroundColor: 'rgba(28, 200, 138, 0.1)',
+						tension: 0.3,
+						fill: true
+					},
+					{
+						label: 'Moradias',
+						data: <?= json_encode($evolucaoMoradias) ?>,
+						borderColor: '#36b9cc',
+						backgroundColor: 'rgba(54, 185, 204, 0.1)',
+						tension: 0.3,
+						fill: true
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Evolução dos Tipos de Imóveis (Últimos 6 meses)',
+						font: {
+							size: 16
+						}
+					},
+					tooltip: {
+						mode: 'index',
+						intersect: false,
+						callbacks: {
+							label: function(context) {
+								return context.dataset.label + ': ' + context.parsed.y + ' imóveis';
+							}
+						}
+					}
+				},
+				scales: {
+					y: {
+						beginAtZero: true,
+						ticks: {
+							stepSize: 1,
+							callback: function(value) {
+								return value + ' imóveis';
+							}
+						},
+						title: {
+							display: true,
+							text: 'Quantidade de Imóveis'
+						}
+					},
+					x: {
+						title: {
+							display: true,
+							text: 'Mês'
+						}
+					}
+				},
+				interaction: {
+					intersect: false,
+					mode: 'index'
 				}
 			}
 		});

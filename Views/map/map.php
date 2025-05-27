@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '/Users/HP/PAP/htdocs/AGVRR/Config/conection.php';
+include_once '../../Config/conection.php';
 
 // Verificação de autenticação
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
@@ -13,47 +13,66 @@ $processedProperties = [];
 $dbError = null;
 
 try {
-    // Consulta modificada para garantir que busca imóveis com coordenadas
-    $stmt = $conn->query("SELECT id, typeResi, location, latitude, longitude, houseSize, price 
-                         FROM residencia 
-                         WHERE latitude IS NOT NULL AND longitude IS NOT NULL");
+    // Consulta básica para debug
+    $stmt = $conn->query("
+        SELECT 
+            id, 
+            typeResi, 
+            location, 
+            latitude, 
+            longitude, 
+            houseSize, 
+            price, 
+            status
+        FROM residencia 
+        WHERE latitude IS NOT NULL 
+        AND longitude IS NOT NULL
+    ");
     
     if ($stmt) {
         $properties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        error_log("Número de propriedades encontradas na consulta: " . count($properties));
         
         if ($properties) {
-            $processedProperties = array_map(function($property) {
+            foreach ($properties as $property) {
+                // Debug dos dados brutos
+                error_log("Processando propriedade ID: " . $property['id']);
+                error_log("Latitude: " . $property['latitude'] . ", Longitude: " . $property['longitude']);
+                
                 // Verificação adicional dos dados
                 if (!is_numeric($property['latitude']) || !is_numeric($property['longitude'])) {
-                    return null; // Ignora registros com coordenadas inválidas
+                    error_log("Coordenadas inválidas para ID: " . $property['id']);
+                    continue;
                 }
                 
-                return [
+                $processedProperties[] = [
                     'id' => $property['id'],
                     'typeResi' => $property['typeResi'] ?? 'Imóvel',
                     'location' => isset($property['location']) ? 
-                    str_replace(['Província ', 'Município ', 'Distrito ', 'Bairro '], '', $property['location']) : 
-                    'Endereço não disponível',
+                        str_replace(['Província ', 'Município ', 'Distrito ', 'Bairro '], '', $property['location']) : 
+                        'Endereço não disponível',
                     'coordinates' => [
                         (float)$property['latitude'],
                         (float)$property['longitude']
                     ],
                     'houseSize' => $property['houseSize'] ?? null,
-                    'price' => $property['price'] ?? null
+                    'price' => $property['price'] ?? null,
+                    'status' => $property['status'] ?? 'N/A'
                 ];
-            }, $properties);
-            
-            // Remove possíveis valores nulos
-            $processedProperties = array_filter($processedProperties);
+            }
         }
     }
+    
+    error_log("Número de propriedades processadas: " . count($processedProperties));
+    
 } catch (PDOException $e) {
     $dbError = "Erro ao buscar imóveis: " . $e->getMessage();
     error_log($dbError);
 }
 
 // Converter para JSON
-$propertiesJson = json_encode(array_values($processedProperties)); // array_values reindexa o array
+$propertiesJson = json_encode(array_values($processedProperties));
+error_log("JSON gerado: " . $propertiesJson);
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +81,8 @@ $propertiesJson = json_encode(array_values($processedProperties)); // array_valu
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/./../AGVRR/Views/CSS/style.css">
-    <link rel="shortcut icon" href="/./../AGVRR/Views/Dashboard-main/img/logo_resi.png">
+    <link rel="stylesheet" href="../../Views/CSS/style.css">
+    <link rel="shortcut icon" href="../../Views/Dashboard-main/img/logo_resi.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Mapa - Painel Administrativo</title>
     <style>
@@ -174,7 +193,7 @@ $propertiesJson = json_encode(array_values($processedProperties)); // array_valu
     
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <img src="/./../AGVRR/Views/Dashboard-main/img/logo_resi.png" alt="Logo">
+        <img src="../../Views/Dashboard-main/img/logo_resi.png" alt="Logo">
         <ul class="side-menu">
             <li><a href="#"><i class='bx bxs-dashboard icon' ></i> Dashboard</a></li>
             <li class="divider" data-text="main">Main</li>
@@ -185,16 +204,16 @@ $propertiesJson = json_encode(array_values($processedProperties)); // array_valu
                     <li><a href="#">Mensagens</a></li>
                 </ul>
             </li>
-            <li><a href="/./../AGVRR/Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
-            <li><a href="/./../AGVRR/Views/map/map.php" class="active"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
+            <li><a href="../../Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
+            <li><a href="../../Views/map/map.php" class="active"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
             <li class="divider" data-text="table">Tabelas</li>
             <li>
                 <a href="#"><i class='bx bxs-notepad icon' ></i> Listagens <i class='bx bx-chevron-right icon-right' ></i></a>
                 <ul class="side-dropdown">
-                    <li><a href="/./../AGVRR/Views/listarUsuarios.php">Listar Usuários</a></li>
-                    <li><a href="/./../AGVRR/Views/listarAdmin.php">Listar Administradores</a></li>
-                    <li><a href="/./../AGVRR/Views/listarResidencias.php">Listar Residências</a></li>
-                    <li><a href="/./../AGVRR/Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
+                    <li><a href="../../Views/listarUsuarios.php">Listar Usuários</a></li>
+                    <li><a href="../../Views/listarAdmin.php">Listar Administradores</a></li>
+                    <li><a href="../../Views/listarResidencias.php">Listar Residências</a></li>
+                    <li><a href="../../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
                 </ul>
             </li>
             <li class="divider" data-text="profile">Perfil</li>
@@ -208,7 +227,7 @@ $propertiesJson = json_encode(array_values($processedProperties)); // array_valu
         </ul>
         <div class="ads">
             <div class="wrapper">
-                <a href="/./../AGVRR/Views/map/map.php" class="btn-upgrade">Atualizar</a>
+                <a href="../../Views/map/map.php" class="btn-upgrade">Atualizar</a>
             </div>
         </div>
     </section>
@@ -286,138 +305,74 @@ $propertiesJson = json_encode(array_values($processedProperties)); // array_valu
     </div>
     
     <script>
-        // Dados das propriedades
-        const properties = <?php echo $propertiesJson; ?>;
-        let userLocation = null;
-        let userAddress = "Localização não disponível";
+    // Debug: Verifica se os dados estão chegando
+    const properties = <?php echo $propertiesJson; ?>;
+    console.log("Dados carregados:", properties);
 
-        // Função para obter a localização do usuário
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    showPosition, 
-                    showError,
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                );
-            } else {
-                document.getElementById('address-text').textContent = 
-                    "Geolocalização não é suportada por este navegador.";
-            }
-        }
-
-        function showPosition(position) {
-            userLocation = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            };
+    function initMap() {
+        ymaps.ready(function() {
+            console.log("Yandex Maps API carregada");
             
-            // Atualiza o texto do endereço
-            document.getElementById('address-text').textContent = 
-                `Localização: ${userLocation.latitude.toFixed(6)}, ${userLocation.longitude.toFixed(6)}`;
-            
-            // Inicializa o mapa com a localização do usuário
-            initMap();
-            
-            // Opcional: Obter endereço reverso (requer API adicional)
-            getReverseGeocode(userLocation.latitude, userLocation.longitude);
-        }
-
-        function showError(error) {
-            let errorMessage;
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage = "Permissão de localização negada pelo usuário.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage = "Informações de localização indisponíveis.";
-                    break;
-                case error.TIMEOUT:
-                    errorMessage = "A requisição de localização expirou.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    errorMessage = "Ocorreu um erro desconhecido.";
-                    break;
-            }
-            
-            document.getElementById('address-text').textContent = errorMessage;
-            
-            // Inicializa o mapa mesmo sem localização (com coordenadas padrão)
-            userLocation = { latitude: -8.8300, longitude: 13.2450 }; // Luanda como padrão
-            initMap();
-        }
-
-        function getReverseGeocode(lat, lng) {
-            // Esta função requer uma API de geocodificação reversa
-            // Você pode usar a API do Yandex ou outra como Google Maps
-            // Exemplo simplificado:
-            fetch(`https://geocode-maps.yandex.ru/1.x/?format=json&apikey=45f8077e-cd8f-4919-be26-31ce1a691183&geocode=${lng},${lat}`)
-                .then(response => response.json())
-                .then(data => {
-                    try {
-                        const address = data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
-                        userAddress = address;
-                        document.getElementById('address-text').textContent = `Localização: ${location}`;
-                    } catch (e) {
-                        console.error("Erro ao processar endereço:", e);
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao obter endereço:", error);
-                });
-        }
-
-        function initMap() {
-            ymaps.ready(function() {
-                const map = new ymaps.Map("map", {
-                    center: [userLocation.latitude, userLocation.longitude],
-                    zoom: 14
-                });
-
-                // Marcador da localização atual
-                const myPlacemark = new ymaps.Placemark(
-                    [userLocation.latitude, userLocation.longitude], 
-                    {
-                        hintContent: 'Minha Localização',
-                        balloonContent: 'Você está aqui'
-                    }, 
-                    {
-                        preset: 'islands#blueCircleDotIcon'
-                    }
-                );
-                map.geoObjects.add(myPlacemark);
-
-                // Adiciona marcadores para os imóveis
-                properties.forEach(property => {
-                    if (property.coordinates[0] && property.coordinates[1]) {
-                        const propertyPlacemark = new ymaps.Placemark(
-                            property.coordinates,
-                            {
-                                hintContent: property.typeResi,
-                                balloonContent: `
-                                    <div style="padding: 5px;">
-                                        <b>${property.typeResi}</b>
-                                        <br>${property.location}
-                                        <br>${property.houseSize ? property.houseSize + ' m²' : ''}
-                                        ${property.price ? ' - ' + property.price + ' Kz' : ''}
-                                        <br><a href="/./../AGVRR/Views/detalhes_residencia.php?id=${property.id}" style="color: #4e73df; text-decoration: none;">Ver detalhes</a>
-                                    </div>
-                                `
-                            },
-                            {
-                                preset: 'islands#greenDotIcon',
-                                iconColor: '#1A7526'
-                            }
-                        );
-                        map.geoObjects.add(propertyPlacemark);
-                    }
-                });
+            const map = new ymaps.Map("map", {
+                center: [-8.8300, 13.2450], // Luanda
+                zoom: 12
             });
-        }
+            
+            console.log("Mapa criado, adicionando", properties.length, "marcadores");
 
-        // Inicia o processo de obtenção de localização quando a página carrega
-        document.addEventListener('DOMContentLoaded', getLocation);
+            // Adiciona marcadores para os imóveis
+            properties.forEach(property => {
+                console.log("Processando propriedade:", property);
+                
+                if (property.coordinates && 
+                    Array.isArray(property.coordinates) && 
+                    property.coordinates.length === 2) {
+                    
+                    console.log("Criando marcador em:", property.coordinates);
+                    
+                    const propertyPlacemark = new ymaps.Placemark(
+                        property.coordinates,
+                        {
+                            hintContent: property.typeResi,
+                            balloonContent: `
+                                <div style="padding: 10px;">
+                                    <strong>${property.typeResi}</strong><br>
+                                    ${property.location}<br>
+                                    ${property.status}<br>
+                                    ${property.price ? property.price + ' Kz' : 'Preço sob consulta'}<br>
+                                    ${property.houseSize ? property.houseSize + ' m²' : ''}
+                                </div>
+                            `
+                        },
+                        {
+                            preset: 'islands#blueDotIcon'
+                        }
+                    );
+                    
+                    map.geoObjects.add(propertyPlacemark);
+                    console.log("Marcador adicionado com sucesso");
+                } else {
+                    console.log("Coordenadas inválidas para propriedade:", property);
+                }
+            });
+
+            // Ajusta o zoom para mostrar todos os marcadores
+            if (map.geoObjects.getLength() > 0) {
+                map.setBounds(map.geoObjects.getBounds(), {
+                    checkZoomRange: true,
+                    zoomMargin: 50
+                });
+            }
+        });
+    }
+
+    // Inicia o mapa quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Página carregada, iniciando mapa");
+        initMap();
+    });
     </script>
-    <script src="/./../AGVRR/js/script.js"></script>
+    <script src="../../js/script.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=45f8077e-cd8f-4919-be26-31ce1a691183&lang=pt_BR" type="text/javascript"></script>
 </body>
 </html>

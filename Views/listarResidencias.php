@@ -8,6 +8,9 @@
 		header("Location: ../Views/index.php");
 		exit();
 	}
+
+	$stmt = $conn->query("SELECT COUNT(*) as count FROM admin_notifications WHERE read_status = 0");
+	$unreadCount = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-en">
@@ -42,7 +45,6 @@
 				<ul class="side-dropdown">
 					<li><a href="#">Alerta</a></li>
 					<li><a href="#">Mensagens</a></li>
-					<li><a href="../Models/gerar_relatorio_residencia.php" target="_blank">Gerar Relatório - Proprietário</a></li>
 				</ul>
 			</li>
 			<li><a href="../Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
@@ -54,7 +56,8 @@
 					<li><a href="../Views/listarUsuarios.php">Listar Usuários</a></li>
 					<li><a href="../Views/listarAdmin.php">Listar Administradores</a></li>
 					<li><a href="../Views/listarResidencias.php">Listar Residências</a></li>
-					<li><a href="../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
+					<!--<li><a href="../Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>-->
+					<li><a href="../Views/listarPendingProperties.php">Listar Imóveis Pendentes</a></li>
 				</ul>
 			</li>
 			<li class="divider" data-text="profile">Perfil</li>
@@ -88,12 +91,9 @@
 					</button>
 				</div>
 			</form>
-			<a href="../Models/gerar_relatorio_residencia.php" target="_blank" class="btn btn btn-outline-light">
-				<i class='bx bxs-file-pdf icon' ></i>
-			</a>
-			<a href="#" class="nav-link">
-				<i class='bx bxs-bell icon' ></i>
-				<span class="badge">5</span>
+			<a href="../Views/admin_notifications.php" class="nav-link">
+				<i class='bx bxs-bell icon'></i>
+				<span class="badge"><?= $unreadCount ?></span>
 			</a>
 			<a href="#" class="nav-link">
 				<i class='bx bxs-message-square-dots icon' ></i>

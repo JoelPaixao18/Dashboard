@@ -138,6 +138,53 @@ document.getElementById('typeResi')?.addEventListener('change', function() {
         `;
     } 
     else if (type === 'Vivenda' || type === 'Moradia') {
+        dynamicFields.innerHTML = `
+            <div class="mb-3">
+                <label class="form-label required">Quintal</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="quintal" id="quintalSim" value="Sim" required>
+                    <label class="form-check-label" for="quintalSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="quintal" id="quintalNao" value="Não" required>
+                    <label class="form-check-label" for="quintalNao">Não</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Garagem</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="garagem" id="garagemSim" value="Sim" required>
+                    <label class="form-check-label" for="garagemSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="garagem" id="garagemNao" value="Não" required>
+                    <label class="form-check-label" for="garagemNao">Não</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Água</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="hasWater" id="hasWaterSim" value="Sim" required>
+                    <label class="form-check-label" for="hasWaterSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="hasWater" id="hasWaterNao" value="Não" required>
+                    <label class="form-check-label" for="hasWaterNao">Não</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Energia Elétrica</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="hasElectricity" id="hasElectricitySim" value="Sim" required>
+                    <label class="form-check-label" for="hasElectricitySim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="hasElectricity" id="hasElectricityNao" value="Não" required>
+                    <label class="form-check-label" for="hasElectricityNao">Não</label>
+                </div>
+            </div>
+        `;
+        
         featuresContainer.innerHTML = `
             <div class="col-md-3">
                 <label class="form-label required">Salas de Estar</label>
@@ -172,13 +219,26 @@ document.getElementById('typeResi')?.addEventListener('change', function() {
                 <label class="form-label required">Andares</label>
                 <select name="andares" id="andares" class="form-select" required>
                     <option value="">Selecione</option>
-                    <option value="0">Nenhum</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3+</option>
+                    <option value="Nenhum">Nenhum</option>
+                    <option value="1 - Andar">1 Andar</option>
+                    <option value="2 - Andar(es)">2 Andares</option>
+                    <option value="3 - Andar(es)">3 Andares</option>
                 </select>
             </div>
         `;
+
+        // Adicionar event listeners para os radio buttons
+        const camposBinarios = ['quintal', 'garagem', 'hasWater', 'hasElectricity'];
+        camposBinarios.forEach(campo => {
+            document.querySelectorAll(`input[name="${campo}"]`).forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Garantir que o valor seja exatamente 'Sim' ou 'Não'
+                    if (this.checked) {
+                        this.value = this.value === 'Sim' ? 'Sim' : 'Não';
+                    }
+                });
+            });
+        });
     }
 });
 
@@ -291,7 +351,7 @@ document.getElementById('image-upload')?.addEventListener('change', function(e) 
 
 // CRUD - Cadastrar 
 // Função para configurar autocomplete de localização
-/*function setupLocationAutocomplete(inputId, suggestionsId) {
+function setupLocationAutocomplete(inputId, suggestionsId) {
     const input = document.getElementById(inputId);
     const suggestions = document.getElementById(suggestionsId);
     
@@ -487,7 +547,7 @@ document.getElementById('typeResi')?.addEventListener('change', function() {
             </div>
         `;
     }
-});*/
+});
 
 // Submissão do formulário de cadastro
 if (document.getElementById('cad-residencia-form')) {
@@ -500,68 +560,50 @@ if (document.getElementById('cad-residencia-form')) {
         const msgAlertaErroCad = document.getElementById("msgAlertaErroCad");
         if (msgAlertaErroCad) msgAlertaErroCad.innerHTML = '';
         
-        // Validações básicas
-        const typeResi = document.getElementById("typeResi").value;
-        const typology = document.querySelector('input[name="typology"]:checked')?.value;
-        const location = document.getElementById("location").value;
-        const houseSize = document.getElementById("houseSize").value;
-        const price = document.getElementById("price").value;
-        const status = document.getElementById("status").value;
-        const images = document.getElementById("image-upload").files;
-
-        let isValid = true;
-        const errors = [];
-
-        if (!typeResi) errors.push("Necessário selecionar o Tipo de Imóvel");
-        if (!typology) errors.push("Necessário selecionar a Tipologia do Imóvel");
-        if (!location) errors.push("Necessário informar a Localização");
-        if (!houseSize || parseFloat(houseSize) <= 0) errors.push("Área inválida (mínimo 0.1m²)");
-        if (!price || isNaN(price) || parseFloat(price) <= 0) errors.push("Preço inválido (deve ser maior que 0)");
-        if (!status) errors.push("Necessário definir o Status");
-        if (images.length === 0) errors.push("Adicione pelo menos uma imagem do imóvel");
-
-        // Validações específicas por tipo de imóvel
-        if (typeResi === 'Apartamento') {
-            const livingRoomCount = document.getElementById("livingRoomCount")?.value;
-            const bathroomCount = document.getElementById("bathroomCount")?.value;
-            const kitchenCount = document.getElementById("kitchenCount")?.value;
-            
-            if (!livingRoomCount) errors.push("Selecione o número de salas de estar");
-            if (!bathroomCount) errors.push("Selecione o número de banheiros");
-            if (!kitchenCount) errors.push("Selecione o número de cozinhas");
-        } else if (typeResi === 'Vivenda' || typeResi === 'Moradia') {
-            const livingRoomCount = document.getElementById("livingRoomCount")?.value;
-            const bathroomCount = document.getElementById("bathroomCount")?.value;
-            const kitchenCount = document.getElementById("kitchenCount")?.value;
-            const andares = document.getElementById("andares")?.value;
-            
-            if (!livingRoomCount) errors.push("Selecione o número de salas de estar");
-            if (!bathroomCount) errors.push("Selecione o número de banheiros");
-            if (!kitchenCount) errors.push("Selecione o número de cozinhas");
-            if (!andares) errors.push("Selecione o número de andares");
-        }
-
-        if (errors.length > 0) {
-            if (msgAlertaErroCad) {
-                msgAlertaErroCad.innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <strong>Erros encontrados:</strong>
-                        <ul class="mb-0">
-                            ${errors.map(error => `<li>${error}</li>`).join('')}
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `;
-            }
-            if (cadBtn) cadBtn.innerHTML = '<i class="fas fa-save me-1"></i> Cadastrar Imóvel';
-            return;
-        }
-
         try {
             const dadosForm = new FormData(document.getElementById('cad-residencia-form'));
+            const typeResi = dadosForm.get('typeResi');
+            
+            // Validações específicas para Vivenda
+            if (typeResi === 'Vivenda') {
+                // Verificar campos booleanos
+                const camposBinarios = ['quintal', 'garagem', 'hasWater', 'hasElectricity'];
+                camposBinarios.forEach(campo => {
+                    const elementos = document.querySelectorAll(`input[name="${campo}"]`);
+                    let valor = null;
+                    elementos.forEach(el => {
+                        if (el.checked) {
+                            valor = el.value;
+                        }
+                    });
+                    if (valor === null) {
+                        throw new Error(`Por favor, selecione uma opção para ${campo}`);
+                    }
+                    if (valor !== 'Sim' && valor !== 'Não') {
+                        throw new Error(`Valor inválido para ${campo}. Deve ser 'Sim' ou 'Não'`);
+                    }
+                    dadosForm.set(campo, valor);
+                });
+
+                // Validar campos obrigatórios
+                const requiredFields = ['andares', 'livingRoomCount', 'bathroomCount', 'kitchenCount'];
+                const errors = [];
+                
+                requiredFields.forEach(field => {
+                    if (!dadosForm.get(field)) {
+                        errors.push(`O campo ${field} é obrigatório`);
+                    }
+                });
+
+                if (errors.length > 0) {
+                    throw new Error(errors.join('<br>'));
+                }
+            }
+            
             dadosForm.append('add', 1);
             
             // Adicionar todas as imagens selecionadas
+            const images = document.getElementById("image-upload").files;
             for (let i = 0; i < images.length; i++) {
                 dadosForm.append('images[]', images[i]);
             }
