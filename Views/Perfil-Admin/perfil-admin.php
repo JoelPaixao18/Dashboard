@@ -1,6 +1,6 @@
 <?php
 
-	include_once '/Users/HP/PAP/htdocs/AGVRR/Config/conection.php';
+	include_once '/Users/HP/PAP/htdocs/RESINGOLA-main/AGVRR/Config/conection.php';
 
 	session_start();
 
@@ -46,16 +46,17 @@
 					<li><a href="#">Mensagens</a></li>
 				</ul>
 			</li>
-			<li><a href="/./../AGVRR/Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
-			<li><a href="/./../AGVRR//Views/map/map.php"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
+			<li><a href="/./../RESINGOLA-main/AGVRR/Views/dash.php"><i class='bx bxs-chart icon' ></i> Graficos</a></li>
+			<li><a href="/./../RESINGOLA-main/AGVRR/Views/map/map.php"><i class='bx bxs-widget icon' ></i> Mapa </a></li>
 			<li class="divider" data-text="table">Tabelas</li>
 			<li>
 				<a href="#"><i class='bx bxs-notepad icon' ></i> Listagens <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
-					<li><a href="/./../AGVRR/Views/listarUsuarios.php">Listar Usuários</a></li>
-					<li><a href="/./../AGVRR/Views/listarAdmin.php">Listar Administradores</a></li>
-					<li><a href="/./../AGVRR/Views/listarResidencias.php">Listar Residências</a></li>
-					<li><a href="/./../AGVRR/Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>
+					<li><a href="/./../RESINGOLA-main/AGVRR/Views/listarUsuarios.php">Listar Usuários</a></li>
+					<li><a href="/./../RESINGOLA-main/AGVRR/Views/listarAdmin.php">Listar Administradores</a></li>
+					<li><a href="/./../RESINGOLA-main/AGVRR/Views/listarResidencias.php">Listar Residências</a></li>
+					<!--<li><a href="/./../AGVRR/Views/listagemGeral.php">Dados - Residência & Proprietário</a></li>-->
+					<li><a href="/./../RESINGOLA-main/AGVRR/Views/listarPendingProperties.php">Listar Imóveis Pendentes</a></li>
 				</ul>
 			</li>
 			<li class="divider" data-text="profile">Perfil</li>
@@ -289,6 +290,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-	<script src="/./../AGVRR/js/script.js"></script>
+	<script src="/./../RESINGOLA-main/AGVRR/js/script.js"></script>
 </body>
 </html>

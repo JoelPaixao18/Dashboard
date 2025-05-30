@@ -175,10 +175,10 @@ $unreadCount = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
                 <i class='bx bxs-bell icon'></i>
                 <span class="badge"><?= $unreadCount ?></span>
             </a>
-            <a href="#" class="nav-link">
-                <i class='bx bxs-message-square-dots icon'></i>
-                <span class="badge">8</span>
-            </a>
+            <!--<a href="#" class="nav-link">
+				<i class='bx bxs-message-square-dots icon'></i>
+				<span class="badge">8</span>
+			</a>-->
             <div class="profile">
                 <?php
                 $nomeAdmin = htmlspecialchars($_SESSION['nome'] ?? 'Admin');

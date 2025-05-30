@@ -8,6 +8,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION
     exit();
 }
 
+    $stmt = $conn->query("SELECT COUNT(*) as count FROM admin_notifications WHERE read_status = 0");
+	$unreadCount = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
 // Inicializa variáveis
 $processedProperties = [];
 $dbError = null;
@@ -89,7 +92,9 @@ error_log("JSON gerado: " . $propertiesJson);
         #map-container {
             width: 100%;
             height: calc(100vh - 60px);
+            min-height: 500px; /* Altura mínima garantida */
             position: relative;
+            background-color: #f0f0f0; /* Cor de fundo temporária para debug */
         }
         #map {
             width: 100%;
@@ -240,10 +245,10 @@ error_log("JSON gerado: " . $propertiesJson);
             <form action="#">
                 
             </form>
-            <a href="#" class="nav-link">
-                <i class='bx bxs-bell icon' ></i>
-                <span class="badge">5</span>
-            </a>
+            <a href="../Views/admin_notifications.php" class="nav-link">
+				<i class='bx bxs-bell icon'></i>
+				<span class="badge"><?= $unreadCount ?></span>
+			</a>
             <a href="#" class="nav-link">
                 <i class='bx bxs-message-square-dots icon' ></i>
                 <span class="badge">8</span>

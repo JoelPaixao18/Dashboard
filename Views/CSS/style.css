@@ -975,6 +975,209 @@ canvas {
     bottom: 10px;
 }
 
+/* Estilização para o modal de cadastro */
+#cadastroResidenciaModal .modal-dialog {
+    max-width: 900px;
+}
+
+#cadastroResidenciaModal .modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#cadastroResidenciaModal .modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+#cadastroResidenciaModal .modal-body {
+    padding: 1.5rem;
+}
+
+#cadastroResidenciaModal .card {
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+#cadastroResidenciaModal .card-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+#cadastroResidenciaModal .card-body {
+    padding: 1.5rem;
+}
+
+#cadastroResidenciaModal .form-label {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+#cadastroResidenciaModal .form-control,
+#cadastroResidenciaModal .form-select {
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s;
+}
+
+#cadastroResidenciaModal .form-control:focus,
+#cadastroResidenciaModal .form-select:focus {
+    border-color: #1A7526;
+    box-shadow: 0 0 0 0.2rem rgba(26, 117, 38, 0.25);
+}
+
+#cadastroResidenciaModal .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+#cadastroResidenciaModal .btn-group .btn {
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+#cadastroResidenciaModal .btn-group .btn-outline-primary {
+    border-color: #1A7526;
+    color: #1A7526;
+}
+
+#cadastroResidenciaModal .btn-group .btn-outline-primary:hover,
+#cadastroResidenciaModal .btn-group .btn-check:checked + .btn-outline-primary {
+    background-color: #1A7526;
+    color: #fff;
+    border-color: #1A7526;
+}
+
+#cadastroResidenciaModal .form-check-input:checked {
+    background-color: #1A7526;
+    border-color: #1A7526;
+}
+
+#cadastroResidenciaModal .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(26, 117, 38, 0.25);
+}
+
+#cadastroResidenciaModal .carousel {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#cadastroResidenciaModal .carousel-inner img {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 0 auto;
+}
+
+#cadastroResidenciaModal .carousel-control-prev,
+#cadastroResidenciaModal .carousel-control-next {
+    width: 5%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+#cadastroResidenciaModal .carousel-control-prev-icon,
+#cadastroResidenciaModal .carousel-control-next-icon {
+    filter: invert(1);
+}
+
+#cadastroResidenciaModal #cad-location-suggestions {
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#cadastroResidenciaModal #cad-location-suggestions .list-group-item {
+    cursor: pointer;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border: none;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#cadastroResidenciaModal #cad-location-suggestions .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+#cadastroResidenciaModal #msgAlertaErroCad {
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+#cadastroResidenciaModal .modal-footer {
+    border-top: none;
+    padding: 1rem 1.5rem;
+}
+
+#cadastroResidenciaModal .btn-primary {
+    background-color: #1A7526;
+    border-color: #1A7526;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+}
+
+#cadastroResidenciaModal .btn-primary:hover {
+    background-color: #15631e;
+    border-color: #15631e;
+}
+
+#cadastroResidenciaModal .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+}
+
+#cadastroResidenciaModal .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#cadastroResidenciaModal .form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Responsividade */
+@media (max-width: 576px) {
+    #cadastroResidenciaModal .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    #cadastroResidenciaModal .btn-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #cadastroResidenciaModal .btn-group .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    #cadastroResidenciaModal .carousel-inner img {
+        max-height: 150px;
+    }
+}
+
 /* Estilo para impressão */
 @media print {
     body * {

@@ -147,10 +147,9 @@
 				<div class="container">
 					<div class="row mt-4">
 						<div class="col-lg-12 d-flex justify-content-between align-items-center">
-							<div class="">
-								<!-- Button trigger modal -->
-								<button type="button" style="margin-left: 119vh; margin-top: -5rem;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadResidenciaModal">
-									Cadastrar Residências
+							<div class="d-flex justify-content-end mb-3">
+								<button type="button" class="btn btn-primary" style="margin-left: 119vh; margin-top: -5rem;" data-bs-toggle="modal" data-bs-target="#cadastroResidenciaModal">
+									<i class="fas fa-plus"></i> Cadastrar Residência
 								</button>
 							</div>
 						</div>
@@ -165,192 +164,222 @@
 				</div>
 
 				<!-- Modal de Cadastro -->
-				<div class="modal fade" id="cadResidenciaModal" tabindex="-1" aria-labelledby="cadResidenciaModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg">
+				<div class="modal fade" id="cadastroResidenciaModal" tabindex="-1" aria-labelledby="cadastroResidenciaModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl">
 						<div class="modal-content">
 							<div class="modal-header bg-primary text-white">
-								<h5 class="modal-title fs-5">
-									<i class="fas fa-home me-2"></i>Cadastrar Novo Imóvel
+								<h5 class="modal-title" id="cadastroResidenciaModalLabel">
+									<i class="fas fa-home me-2"></i>Cadastrar Nova Residência
 								</h5>
 								<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
-							<div class="modal-body">
-								<form id="cad-residencia-form" enctype="multipart/form-data">
-									<span id="msgAlertaErroCad"></span>
-									
-									<!-- Seção de Imagens -->
-									<div class="card mb-4">
+							<div class="modal-body p-4">
+								<div id="msgAlertaErroCad" class="alert alert-danger d-none shadow-sm"></div>
+								<form id="cadastro-residencia-form" enctype="multipart/form-data">
+									<!-- Seção: Imagens -->
+									<div class="card mb-4 shadow-sm">
 										<div class="card-header bg-light">
-											<h6 class="mb-0">
-												<i class="fas fa-images me-2"></i>Imagens do Imóvel
-											</h6>
+											<h6 class="mb-0"><i class="fas fa-image me-2"></i>Imagens do Imóvel</h6>
 										</div>
 										<div class="card-body">
-											<div class="row" id="cad-images-container">
-												<div class="col-12 text-muted">Nenhuma imagem selecionada</div>
+											<div class="mb-3">
+												<label for="cad-images" class="form-label fw-bold">
+													<i class="fas fa-upload me-1"></i>Selecionar Imagens*
+												</label>
+												<input type="file" class="form-control" id="cad-images" name="images[]" accept="image/*" multiple aria-describedby="imagesHelp">
+												<div id="imagesHelp" class="form-text">
+													Até 5 imagens (JPEG, PNG, GIF, máx. 5MB cada).
+												</div>
 											</div>
-											<div class="mt-3">
-												<button type="button" class="btn btn-outline-primary" id="add-images-btn">
-													<i class="fas fa-plus me-1"></i> Adicionar Imagens
+											<div id="cad-images-preview" class="carousel slide" data-bs-ride="false">
+												<div class="carousel-inner"></div>
+												<button class="carousel-control-prev" type="button" data-bs-target="#cad-images-preview" data-bs-slide="prev">
+													<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+													<span class="visually-hidden">Anterior</span>
 												</button>
-												<input type="file" id="image-upload" multiple accept="image/*" style="display: none;">
-												<small class="text-muted d-block mt-1">Máximo 5 imagens (JPEG, PNG, até 2MB cada)</small>
-											</div>
-										</div>
-									</div>
-									
-									<div class="row">
-										<!-- Coluna de Informações Básicas -->
-										<div class="col-md-6">
-											<div class="card mb-4">
-												<div class="card-header bg-light">
-													<h6 class="mb-0">
-														<i class="fas fa-info-circle me-2"></i>Informações Básicas
-													</h6>
-												</div>
-												<div class="card-body">
-													<div class="mb-3">
-														<label for="typeResi" class="form-label required">Tipo de Imóvel</label>
-														<select name="typeResi" id="typeResi" class="form-select" required>
-															<option value="">Selecione o tipo</option>
-															<option value="Apartamento">Apartamento</option>
-															<option value="Vivenda">Vivenda</option>
-															<option value="Moradia">Moradia</option>
-														</select>
-													</div>
-													
-													<div class="mb-3">
-														<label for="typology" class="form-label required">Tipologia</label>
-														<div id="typology-options" class="btn-group" role="group">
-															<input type="radio" class="btn-check" name="typology" id="typologyT1" value="T1" required>
-															<label class="btn btn-outline-primary" for="typologyT1">T1</label>
-															
-															<input type="radio" class="btn-check" name="typology" id="typologyT2" value="T2">
-															<label class="btn btn-outline-primary" for="typologyT2">T2</label>
-															
-															<input type="radio" class="btn-check" name="typology" id="typologyT3" value="T3">
-															<label class="btn btn-outline-primary" for="typologyT3">T3</label>
-															
-															<input type="radio" class="btn-check" name="typology" id="typologyT4" value="T4">
-															<label class="btn btn-outline-primary" for="typologyT4">T4</label>
-
-															<input type="radio" class="btn-check" name="typology" id="typologyT5" value="T5">
-															<label class="btn btn-outline-primary" for="typologyT5">T5</label>
-
-															<input type="radio" class="btn-check" name="typology" id="typologyT6" value="T6">
-															<label class="btn btn-outline-primary" for="typologyT6">T6</label>
-															
-															<input type="radio" class="btn-check" name="typology" id="typologyOutro" value="Outro">
-															<label class="btn btn-outline-primary" for="typologyOutro">Outro</label>
-														</div>
-													</div>
-													
-													<div class="mb-3">
-														<label for="location" class="form-label required">Localização</label>
-														<input type="text" name="location" id="location" class="form-control" required>
-														<div id="location-suggestions" class="list-group mt-2 d-none"></div>
-													</div>
-													
-													<div class="mb-3">
-														<label for="houseSize" class="form-label required">Área Construída (m²)</label>
-														<input type="number" name="houseSize" id="houseSize" class="form-control" step="0.1" min="0" required>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<!-- Coluna de Valores e Status -->
-										<div class="col-md-6">
-											<div class="card mb-4">
-												<div class="card-header bg-light">
-													<h6 class="mb-0">
-														<i class="fas fa-tag me-2"></i>Valor e Status
-													</h6>
-												</div>
-												<div class="card-body">
-													<div class="mb-3">
-														<label for="status" class="form-label required">Status</label>
-														<select name="status" id="status" class="form-select" required>
-															<option value="">Selecione o status</option>
-															<option value="Venda">Venda</option>
-															<option value="Arrendamento">Arrendamento</option>
-														</select>
-													</div>
-													
-													<div class="mb-3">
-														<label for="price" class="form-label required">Valor (Kz)</label>
-														<div class="input-group">
-															<span class="input-group-text">Kz</span>
-															<input type="number" name="price" id="price" class="form-control" step="0.01" min="0" required>
-														</div>
-													</div>
-													
-													<!-- Campos dinâmicos baseados no tipo de imóvel -->
-													<div id="dynamic-fields">
-														<!-- Será preenchido via JavaScript -->
-													</div>
-												</div>
+												<button class="carousel-control-next" type="button" data-bs-target="#cad-images-preview" data-bs-slide="next">
+													<span class="carousel-control-next-icon" aria-hidden="true"></span>
+													<span class="visually-hidden">Próximo</span>
+												</button>
 											</div>
 										</div>
 									</div>
 
-									<!-- Seção de Características -->
-									<div class="card mb-4">
+									<!-- Seção: Informações Básicas -->
+									<div class="card mb-4 shadow-sm">
 										<div class="card-header bg-light">
-											<h6 class="mb-0">
-												<i class="fas fa-home me-2"></i>Características
-											</h6>
-										</div>
-										<div class="card-body">
-											<div class="row" id="features-container">
-												<!-- Será preenchido via JavaScript -->
-											</div>
-										</div>
-									</div>
-
-									<!-- Seção de Infraestrutura -->
-									<div class="card mb-4">
-										<div class="card-header bg-light">
-											<h6 class="mb-0">
-												<i class="fas fa-bolt me-2"></i>Infraestrutura
-											</h6>
+											<h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informações Básicas</h6>
 										</div>
 										<div class="card-body">
 											<div class="row">
-												<div class="col-md-3">
-													<div class="form-check form-switch mb-3">
-														<input class="form-check-input" type="checkbox" name="quintal" id="quintal" value="1">
-														<label class="form-check-label" for="quintal">Quintal/Jardim</label>
+												<div class="col-md-6 mb-3">
+													<label for="cad-houseSize" class="form-label fw-bold">
+														<i class="fas fa-ruler me-1"></i>Tamanho da Casa (m²)*
+													</label>
+													<input type="number" class="form-control" id="cad-houseSize" name="houseSize" min="0" step="0.01" required aria-describedby="houseSizeHelp">
+													<div id="houseSizeHelp" class="form-text">Exemplo: 120.50</div>
+												</div>
+												<div class="col-md-6 mb-3">
+													<label for="cad-status" class="form-label fw-bold">
+														<i class="fas fa-tag me-1"></i>Imóvel Para*
+													</label>
+													<select class="form-select" id="cad-status" name="status" required>
+														<option value="" disabled selected>Selecione</option>
+														<option value="Venda">Venda</option>
+														<option value="Arrendamento">Arrendamento</option>
+													</select>
+												</div>
+												<div class="col-md-6 mb-3">
+													<label for="cad-typeResi" class="form-label fw-bold">
+														<i class="fas fa-building me-1"></i>Tipo de Imóvel*
+													</label>
+													<select class="form-select" id="cad-typeResi" name="typeResi" required>
+														<option value="Apartamento">Apartamento</option>
+														<option value="Vivenda">Vivenda</option>
+														<option value="Moradia">Moradia</option>
+													</select>
+												</div>
+												<div class="col-md-6 mb-3" id="cad-typology-container">
+													<label class="form-label fw-bold">
+														<i class="fas fa-layer-group me-1"></i>Tipologia*
+													</label>
+													<div id="cad-typology-options" class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Tipologia"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Seção: Características -->
+									<div class="card mb-4 shadow-sm">
+										<div class="card-header bg-light">
+											<h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Características</h6>
+										</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-md-6 mb-3" id="cad-livingRoomCount-container">
+													<label class="form-label fw-bold">
+														<i class="fas fa-couch me-1"></i>Número de Salas*
+													</label>
+													<div id="cad-livingRoomCount-options" class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Salas"></div>
+												</div>
+												<div class="col-md-6 mb-3" id="cad-bathroomCount-container">
+													<label class="form-label fw-bold">
+														<i class="fas fa-bath me-1"></i>Número de Banheiros*
+													</label>
+													<div id="cad-bathroomCount-options" class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Banheiros"></div>
+												</div>
+												<div class="col-md-6 mb-3" id="cad-kitchenCount-container">
+													<label class="form-label fw-bold">
+														<i class="fas fa-kitchen-set me-1"></i>Número de Cozinhas*
+													</label>
+													<div id="cad-kitchenCount-options" class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Cozinhas"></div>
+												</div>
+												<div class="col-md-6 mb-3" id="cad-andares-container">
+													<label class="form-label fw-bold">
+														<i class="fas fa-stairs me-1"></i>Número de Andares*
+													</label>
+													<div id="cad-andares-options" class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Andares"></div>
+												</div>
+												<div class="col-md-4 mb-3">
+													<label class="form-label fw-bold">
+														<i class="fas fa-tree me-1"></i>Quintal
+													</label>
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="cad-quintal" name="quintal" role="switch">
+														<label class="form-check-label" for="cad-quintal">Sim</label>
 													</div>
 												</div>
-												<div class="col-md-3">
-													<div class="form-check form-switch mb-3">
-														<input class="form-check-input" type="checkbox" name="garagem" id="garagem" value="1">
-														<label class="form-check-label" for="garagem">Garagem</label>
+												<div class="col-md-4 mb-3">
+													<label class="form-label fw-bold">
+														<i class="fas fa-car me-1"></i>Garagem
+													</label>
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="cad-garagem" name="garagem" role="switch">
+														<label class="form-check-label" for="cad-garagem">Sim</label>
 													</div>
 												</div>
-												<div class="col-md-3">
-													<div class="form-check form-switch mb-3">
-														<input class="form-check-input" type="checkbox" name="hasWater" id="hasWater" value="1">
-														<label class="form-check-label" for="hasWater">Água</label>
+												<div class="col-md-4 mb-3">
+													<label class="form-label fw-bold">
+														<i class="fas fa-door-open me-1"></i>Varanda
+													</label>
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="cad-varanda" name="varanda" role="switch">
+														<label class="form-check-label" for="cad-varanda">Sim</label>
 													</div>
 												</div>
-												<div class="col-md-3">
-													<div class="form-check form-switch mb-3">
-														<input class="form-check-input" type="checkbox" name="hasElectricity" id="hasElectricity" value="1">
-														<label class="form-check-label" for="hasElectricity">Energia</label>
+												<div class="col-12 mb-3">
+													<label class="form-label fw-bold">
+														<i class="fas fa-plug me-1"></i>Recursos
+													</label>
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="cad-hasWater" name="hasWater" role="switch">
+														<label class="form-check-label" for="cad-hasWater">Água</label>
+													</div>
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="cad-hasElectricity" name="hasElectricity" role="switch">
+														<label class="form-check-label" for="cad-hasElectricity">Energia Elétrica</label>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 
+									<!-- Seção: Localização e Preço -->
+									<div class="card mb-4 shadow-sm">
+										<div class="card-header bg-light">
+											<h6 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Localização e Preço</h6>
+										</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-12 mb-3 position-relative">
+													<label for="cad-location" class="form-label fw-bold">
+														<i class="fas fa-map me-1"></i>Localização*
+													</label>
+													<input type="text" class="form-control" id="cad-location" name="location" placeholder="Ex: Luanda, Talatona" required aria-describedby="locationHelp">
+													<div id="locationHelp" class="form-text">Digite a localização para ver sugestões.</div>
+													<input type="hidden" id="cad-latitude" name="latitude">
+													<input type="hidden" id="cad-longitude" name="longitude">
+													<div id="cad-location-suggestions" class="list-group shadow-sm"></div>
+												</div>
+												<div class="col-md-6 mb-3">
+													<label for="cad-price" class="form-label fw-bold">
+														<i class="fas fa-money-bill me-1"></i>Preço (Kz)*
+													</label>
+													<input type="number" class="form-control" id="cad-price" name="price" min="0" step="0.01" required aria-describedby="priceHelp">
+													<div id="priceHelp" class="form-text">Exemplo: 150000</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Seção: Descrição -->
+									<div class="card mb-4 shadow-sm">
+										<div class="card-header bg-light">
+											<h6 class="mb-0"><i class="fas fa-file-alt me-2"></i>Descrição</h6>
+										</div>
+										<div class="card-body">
+											<div class="mb-3">
+												<label for="cad-description" class="form-label fw-bold">
+													<i class="fas fa-comment me-1"></i>Descrição (opcional)
+												</label>
+												<textarea class="form-control" id="cad-description" name="description" rows="4" maxlength="500" placeholder="Ex: Casa com vista para o mar, recém-renovada, perto de escolas..." aria-describedby="descriptionHelp"></textarea>
+												<div id="descriptionHelp" class="form-text">Máximo de 500 caracteres.</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Campo Oculto: ID do Usuário -->
+									<input type="hidden" id="cad-user_id" name="user_id" value="<?php echo isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']) : ''; ?>">
+
+									<div class="form-text mb-3">
+										<span class="text-danger">*</span> Campos obrigatórios
+									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-											<i class="fas fa-times me-1"></i> Cancelar
+										<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+											<i class="fas fa-times me-1"></i>Fechar
 										</button>
-										<button type="submit" class="btn btn-primary" id="cad-residencia-btn">
-											<i class="fas fa-save me-1"></i> Cadastrar Imóvel
+										<button type="submit" class="btn btn-primary">
+											<i class="fas fa-save me-1"></i>Cadastrar
 										</button>
 									</div>
 								</form>
@@ -716,10 +745,6 @@
     crossorigin="anonymous"></script>
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/my_chart.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<script src="../js/script.js"></script>
 	<script src="../js/custom-resi.js"></script>
 	<!--<script src="../js/apartament-fields.js"></script>
